@@ -73,7 +73,7 @@ namespace CasualStone
             {
                 try
                 {
-                    File.Create(withName);
+                    File.Create(withName).Dispose();
                 }
                 catch (Exception ex)
                 {
