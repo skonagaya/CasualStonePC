@@ -12,6 +12,8 @@ using Microsoft.Win32;
 using System.Text.RegularExpressions;
 using ToastNotifications;
 using System.ComponentModel;
+using System.Collections.Specialized;
+using System.Drawing;
 
 namespace CasualStone
 {
@@ -24,7 +26,13 @@ namespace CasualStone
         [STAThread]
         static void Main()
         {
-            String checkpoint;
+            // initialize username list
+            if (Properties.Settings.Default.Usernames == null)
+            {
+                Properties.Settings.Default.Usernames = new System.Collections.Specialized.StringCollection();
+                Properties.Settings.Default.Save();
+            }
+
             var toastNotification1 = new Notification("", "", 0, Properties.Settings.Default.closeAllEnabled, Properties.Settings.Default.showHSEnabled, Properties.Settings.Default.notifBgColor, Properties.Settings.Default.notifTextColor);
 
             String hearthStoneInstallPath = getHearthstoneInstallPath();
@@ -35,7 +43,7 @@ namespace CasualStone
 
 
             Application.EnableVisualStyles();
-            //Application.SetCompatibleTextRenderingDefault(false);
+            //Application.SetCompatibleTextRenderingDefault(true);
             Application.Run(new CasualStoneForm(logFileName));
         }
         
@@ -187,6 +195,15 @@ public class HearthLogReader
     private bool showHSEnabled;
     private bool autoFocusHSEnabled;
     private int notifDuration;
+    private int usernameMissCount;
+
+    private bool spectatorModeEnabled;
+
+    private string gameStartFilter;
+    private string turnStartFilter;
+    private string concedeFilter;
+
+    private StringCollection usernames;
 
     private System.Drawing.Color bgColor;
     private System.Drawing.Color txtColor;
@@ -196,7 +213,20 @@ public class HearthLogReader
 
     // The constructor obtains the state information and the
     // callback delegate.
-    public HearthLogReader(string logFileName, bool hideNotifEnabled, bool closeAllNotifEnabled, bool showHSEnabled, bool autoFocusHSEnabled, int notifDuration, System.Drawing.Color bgColor, System.Drawing.Color txtColor)
+    public HearthLogReader(
+        string logFileName, 
+        bool hideNotifEnabled, 
+        bool closeAllNotifEnabled, 
+        bool showHSEnabled, 
+        bool autoFocusHSEnabled, 
+        int notifDuration, 
+        Color bgColor, 
+        Color txtColor,
+        string gameStartFilter,
+        string turnStartFilter,
+        string concedeFilter,
+        StringCollection usernames
+        )
     {
         this.logFileName = logFileName;
         this.hideNotifEnabled = hideNotifEnabled;
@@ -207,7 +237,21 @@ public class HearthLogReader
         this.bgColor = bgColor;
         this.txtColor = txtColor;
 
+        this.gameStartFilter = gameStartFilter;
+        this.turnStartFilter = turnStartFilter;
+        this.concedeFilter = concedeFilter;
+
+        this.spectatorModeEnabled = false;
+
+        this.usernames = usernames;
+
         bgLogReader = new BackgroundWorker();
+
+        // We tally the number of times an event occured that requires a username.
+        // If the number of miss count reaches 2, we know each player in a game had played a turn
+        // and that the username that is saved in the casualstone settings is invalid
+        // We then throw an appropriate error.
+        usernameMissCount = 0;
 
         // Create a background worker thread that ReportsProgress &
         // SupportsCancellation
@@ -218,13 +262,35 @@ public class HearthLogReader
 
     }
 
-    public void updatePreferences(bool hideNotifEnabled, bool closeAllNotifEnabled, bool showHSEnabled, bool autoFocusHSEnabled, int notifDuration)
+    public void updatePreferences(
+        bool hideNotifEnabled, 
+        bool closeAllNotifEnabled, 
+        bool showHSEnabled, 
+        bool autoFocusHSEnabled, 
+        int notifDuration,
+        Color bgColor,
+        Color txtColor,
+        string gameStartFilter,
+        string turnStartFilter,
+        string concedeFilter,
+        StringCollection usernames
+        )
     {
         this.hideNotifEnabled = hideNotifEnabled;
         this.closeAllNotifEnabled = closeAllNotifEnabled;
         this.showHSEnabled = showHSEnabled;
         this.autoFocusHSEnabled = autoFocusHSEnabled;
         this.notifDuration = notifDuration;
+
+        this.bgColor = bgColor;
+        this.txtColor = txtColor;
+
+        this.gameStartFilter = gameStartFilter;
+        this.turnStartFilter = turnStartFilter;
+        this.concedeFilter = concedeFilter;
+
+        this.usernames = usernames;
+
     }
 
     public void getRolling()
@@ -233,6 +299,48 @@ public class HearthLogReader
         bgLogReader.RunWorkerAsync(this.logFileName);
     }
 
+
+    private bool showNotification(string eventName, string userName, bool focusTurn)
+    {
+        bool showNotification = false;
+        List<String> usernameList = this.usernames.Cast<String>().ToList();
+        switch (eventName)
+        {
+            case "Show for Player":
+                if (usernameList.Contains(userName.Trim(), StringComparer.OrdinalIgnoreCase))
+                {
+                    if (focusTurn) { FocusProcess("Hearthstone"); }
+                    this.spectatorModeEnabled = false;
+                    showNotification = true;
+                    this.usernameMissCount = 0;
+                } else { this.usernameMissCount++; }
+                break;
+            case "Show for Opponent":
+                if (usernameList.Contains(userName.Trim(), StringComparer.OrdinalIgnoreCase))
+                {
+                    if (focusTurn) { FocusProcess("Hearthstone"); }
+                    this.usernameMissCount = 0;
+                    this.spectatorModeEnabled = false;
+
+                } else
+                {
+                    this.usernameMissCount++;
+                    showNotification = true;
+                }
+                break;
+            case "Show for Both":
+                showNotification = true;
+                break;
+            case "None":
+                showNotification = false;
+                break;
+            default:
+                showNotification = false;
+                Console.WriteLine("Event: \"" + eventName + "\"  doesn't map to anything"); //logdis
+                break;
+        }
+        return showNotification;
+    }
 
     /// <summary>
     /// On completed do the appropriate task
@@ -245,24 +353,38 @@ public class HearthLogReader
         if (results != null)
         {
             Console.WriteLine(results[0] + ": " + results[1]);
+            Console.WriteLine("gameStartFilter: " + gameStartFilter);
+            Console.WriteLine("turnStartFilter: " + turnStartFilter);
+            Console.WriteLine("concedefilter: " + concedeFilter);
 
-            //TODO catch response array null case
+            string eventFilter = results[0]; // let's assume results[1] is the username
+
+            //TODO catch response array null case //logdis
+
+            if (spectatorModeEnabled) Console.WriteLine("Spectator mode detected. Notifications supressed."); //logdis
 
             string text = "";
             string imageName = "";
-            switch (results[0])
+            bool eventEnabled = true;
+            switch (eventFilter)
             {
-                case "CREATE_GAME":
-                    text = "Game is starting...";
-                    imageName = "start";
+                case "Game Start":
+
+                    this.usernameMissCount = 0;
+
+                    if (this.gameStartFilter == "None") eventEnabled = false;
+                    else
+                    {
+                        text = "Game is starting..."; imageName = "start";
+                    }
                     break;
-                case "CONCEDE":
-                    text = results[1] + " conceded";
-                    imageName = "concede";
+                case "Concede":
+                    eventEnabled = showNotification(this.concedeFilter, results[1], false);
+                    text = results[1] + " conceded"; imageName = "concede";
                     break;
-                case "START_TURN":
-                    text = results[1] + "'s turn";
-                    imageName = "turn";
+                case "Turn Start":
+                    eventEnabled = showNotification(this.turnStartFilter, results[1], this.autoFocusHSEnabled);
+                    text = results[1] + "'s turn"; imageName = "turn";
                     break;
                 default:
                     Console.WriteLine("Call back got an event that's not mapped. This should never happen"); //logdis
@@ -270,7 +392,13 @@ public class HearthLogReader
                     imageName = "warning";
                     break;
             }
-            if (!this.hideNotifEnabled || (this.hideNotifEnabled && !processIsFocused("Hearthstone")))
+            if (this.usernameMissCount > 2)
+            {
+                var warningNotification = new Notification("User not found. Set up in Settings.", "warning1", this.notifDuration, this.closeAllNotifEnabled, this.showHSEnabled, this.bgColor, this.txtColor);
+                warningNotification.Show();
+
+            }
+            else if (!spectatorModeEnabled && eventEnabled && (!this.hideNotifEnabled || (this.hideNotifEnabled && !processIsFocused("Hearthstone"))))
             {
                 var toastNotification = new Notification(text, imageName, this.notifDuration, this.closeAllNotifEnabled, this.showHSEnabled, this.bgColor, this.txtColor);
                 toastNotification.Show();
@@ -279,6 +407,22 @@ public class HearthLogReader
         
         bgLogReader.RunWorkerAsync(this.logFileName);
 
+    }
+
+    [DllImport("user32.dll")]
+    public static extern bool ShowWindowAsync(HandleRef hWnd, int nCmdShow);
+    [DllImport("user32.dll")]
+    public static extern bool SetForegroundWindow(IntPtr WindowHandle);
+    public const int SW_RESTORE = 9;
+    private void FocusProcess(string procName)
+    {
+        Process[] objProcesses = System.Diagnostics.Process.GetProcessesByName(procName); if (objProcesses.Length > 0)
+        {
+            IntPtr hWnd = IntPtr.Zero;
+            hWnd = objProcesses[0].MainWindowHandle;
+            ShowWindowAsync(new HandleRef(null, hWnd), SW_RESTORE);
+            SetForegroundWindow(objProcesses[0].MainWindowHandle);
+        }
     }
 
     private bool processRunning(string procName)
@@ -316,6 +460,8 @@ public class HearthLogReader
             {
                 System.Threading.Thread.Sleep(3000);
                 Console.Write(".");
+                this.spectatorModeEnabled = false;
+                this.usernameMissCount = 0;
                 return;
             } else
             {
@@ -349,6 +495,8 @@ public class HearthLogReader
                     {
                         Console.WriteLine("Setting new offset because log file was truncated"); //logdis
                         lastMaxOffset = 0;//reader.BaseStream.Length;
+                        this.usernameMissCount = 0;
+                        this.spectatorModeEnabled = false;
                     }
 
                     //seek to the last max offset
@@ -384,7 +532,7 @@ public class HearthLogReader
                                 string pattern = "(.*Entity=)|( Effect.*)";
                                 string usernameTrimmed = Regex.Replace(line, pattern, "");
 
-                                String[] responseArray = { "START_TURN", usernameTrimmed };
+                                String[] responseArray = { "Turn Start", usernameTrimmed };
                                 e.Result = responseArray;
                                 return;
                             }
@@ -399,7 +547,7 @@ public class HearthLogReader
                                 string pattern = "(.*Entity=)|( Effect.*)";
                                 string usernameTrimmed = Regex.Replace(line, pattern, "");
 
-                                String[] responseArray = { "START_TURN", usernameTrimmed };
+                                String[] responseArray = { "Turn Start", usernameTrimmed };
                                 e.Result = responseArray;
                                 return;
                             }
@@ -411,7 +559,7 @@ public class HearthLogReader
                             string pattern = "(.*Entity=)|(tag=PLAYSTATE.*)";
                             string usernameTrimmed = Regex.Replace(line, pattern, "");
 
-                            String[] responseArray = { "CONCEDE", usernameTrimmed };
+                            String[] responseArray = { "Concede", usernameTrimmed };
                             e.Result = responseArray;
                             return;
 
@@ -419,8 +567,20 @@ public class HearthLogReader
                         // Look for create games and send it to constructor
                         else if (line.Contains("CREATE_GAME"))
                         {
-                            String[] responseArray = { "CREATE_GAME", "" };
+                            String[] responseArray = { "Game Start", "" };
                             e.Result = responseArray;
+                            return;
+                        }
+                        // Look for create games and send it to constructor
+                        else if (line.Contains("Begin Spectating"))
+                        {
+                            this.spectatorModeEnabled = false;
+                            return;
+                        }
+                        // Look for create games and send it to constructor
+                        else if (line.Contains("End Spectator"))
+                        {
+                            this.spectatorModeEnabled = false;
                             return;
                         }
                     }

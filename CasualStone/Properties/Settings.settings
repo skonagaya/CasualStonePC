@@ -5,17 +5,17 @@
     <Setting Name="Setting" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="Username" Type="System.String" Scope="User">
+    <Setting Name="Usernames" Type="System.Collections.Specialized.StringCollection" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
     <Setting Name="TURN_START" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">Show for Both</Value>
     </Setting>
     <Setting Name="GAME_START" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">Show for Both</Value>
     </Setting>
     <Setting Name="CONCEDE" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">Show for Both</Value>
     </Setting>
     <Setting Name="hideNotifEnabled" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>

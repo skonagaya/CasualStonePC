@@ -37,19 +37,18 @@ namespace CasualStone.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string Username {
+        public global::System.Collections.Specialized.StringCollection Usernames {
             get {
-                return ((string)(this["Username"]));
+                return ((global::System.Collections.Specialized.StringCollection)(this["Usernames"]));
             }
             set {
-                this["Username"] = value;
+                this["Usernames"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Show for Both")]
         public string TURN_START {
             get {
                 return ((string)(this["TURN_START"]));
@@ -61,7 +60,7 @@ namespace CasualStone.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Show for Both")]
         public string GAME_START {
             get {
                 return ((string)(this["GAME_START"]));
@@ -73,7 +72,7 @@ namespace CasualStone.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Show for Both")]
         public string CONCEDE {
             get {
                 return ((string)(this["CONCEDE"]));

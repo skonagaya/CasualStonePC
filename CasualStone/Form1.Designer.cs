@@ -32,8 +32,6 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CasualStoneForm));
             this.trayIcon = new System.Windows.Forms.NotifyIcon(this.components);
             this.mainMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.usernameDisplayTextBox = new System.Windows.Forms.ToolStripTextBox();
-            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.gameStartToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showForPlayerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showForOpponentToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -55,43 +53,49 @@
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabControl = new System.Windows.Forms.TabControl();
             this.preferenceTabPage = new System.Windows.Forms.TabPage();
+            this.preferenceErrorLabel = new System.Windows.Forms.Label();
+            this.previewButton = new System.Windows.Forms.Button();
+            this.notificationTextColorLabel = new System.Windows.Forms.Label();
+            this.notificationTextColorPanel = new System.Windows.Forms.Panel();
+            this.notifBackgroundColorLabel = new System.Windows.Forms.Label();
+            this.notificationBackgroundColorPanel = new System.Windows.Forms.Panel();
+            this.autoFocusCheckBox = new System.Windows.Forms.CheckBox();
             this.durationLabel = new System.Windows.Forms.Label();
             this.durationDescriptionLabel = new System.Windows.Forms.Label();
             this.durationBar = new System.Windows.Forms.TrackBar();
             this.closeAllNotifCheckBox = new System.Windows.Forms.CheckBox();
             this.showHSCheckBox = new System.Windows.Forms.CheckBox();
             this.hideNotifCheckBox = new System.Windows.Forms.CheckBox();
-            this.aboutTabPage = new System.Windows.Forms.TabPage();
+            this.accountTabPage = new System.Windows.Forms.TabPage();
+            this.clearUsernameButton = new System.Windows.Forms.Button();
+            this.removeUsernameButton = new System.Windows.Forms.Button();
+            this.usernameErrorLabel = new System.Windows.Forms.Label();
+            this.addUsernameButton = new System.Windows.Forms.Button();
+            this.usernameTextBox = new System.Windows.Forms.TextBox();
+            this.usernameListBox = new System.Windows.Forms.ListBox();
+            this.accountLabel = new System.Windows.Forms.Label();
             this.updatesTabPage = new System.Windows.Forms.TabPage();
+            this.updateLinkLabel = new System.Windows.Forms.LinkLabel();
+            this.updateLabel = new System.Windows.Forms.Label();
+            this.updatePictureBox = new System.Windows.Forms.PictureBox();
+            this.aboutTabPage = new System.Windows.Forms.TabPage();
+            this.versionLabel = new System.Windows.Forms.Label();
+            this.casualStoneLabel = new System.Windows.Forms.Label();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.cancelButton = new System.Windows.Forms.Button();
             this.okButton = new System.Windows.Forms.Button();
             this.applyButton = new System.Windows.Forms.Button();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
-            this.accountTabPage = new System.Windows.Forms.TabPage();
-            this.autoFocusCheckBox = new System.Windows.Forms.CheckBox();
-            this.notificationBackgroundColorPanel = new System.Windows.Forms.Panel();
-            this.notifBackgroundColorLabel = new System.Windows.Forms.Label();
             this.colorDialog = new System.Windows.Forms.ColorDialog();
-            this.notificationTextColorPanel = new System.Windows.Forms.Panel();
-            this.notificationTextColorLabel = new System.Windows.Forms.Label();
-            this.previewButton = new System.Windows.Forms.Button();
-            this.accountLabel = new System.Windows.Forms.Label();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.usernameListBox = new System.Windows.Forms.ListBox();
-            this.usernameTextBox = new System.Windows.Forms.TextBox();
-            this.addUsernameButton = new System.Windows.Forms.Button();
-            this.usernameErrorLabel = new System.Windows.Forms.Label();
-            this.removeUsernameButton = new System.Windows.Forms.Button();
-            this.clearUsernameButton = new System.Windows.Forms.Button();
-            this.versionLabel = new System.Windows.Forms.Label();
-            this.casualStoneLabel = new System.Windows.Forms.Label();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.mainMenuStrip.SuspendLayout();
             this.tabControl.SuspendLayout();
             this.preferenceTabPage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.durationBar)).BeginInit();
-            this.aboutTabPage.SuspendLayout();
             this.accountTabPage.SuspendLayout();
+            this.updatesTabPage.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.updatePictureBox)).BeginInit();
+            this.aboutTabPage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -107,8 +111,6 @@
             // 
             this.mainMenuStrip.ImageScalingSize = new System.Drawing.Size(28, 28);
             this.mainMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.usernameDisplayTextBox,
-            this.toolStripSeparator2,
             this.gameStartToolStripMenuItem,
             this.turnStartToolStripMenuItem,
             this.concedeToolStripMenuItem,
@@ -117,19 +119,8 @@
             this.settingsToolStripMenuItem,
             this.exitToolStripMenuItem});
             this.mainMenuStrip.Name = "mainMenuStrip";
-            this.mainMenuStrip.Size = new System.Drawing.Size(185, 229);
+            this.mainMenuStrip.Size = new System.Drawing.Size(212, 223);
             this.mainMenuStrip.Opening += new System.ComponentModel.CancelEventHandler(this.mainMenuStrip_Opening);
-            // 
-            // usernameDisplayTextBox
-            // 
-            this.usernameDisplayTextBox.Name = "usernameDisplayTextBox";
-            this.usernameDisplayTextBox.Size = new System.Drawing.Size(100, 31);
-            this.usernameDisplayTextBox.Text = "Playing as";
-            // 
-            // toolStripSeparator2
-            // 
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(181, 6);
             // 
             // gameStartToolStripMenuItem
             // 
@@ -139,7 +130,7 @@
             this.showForToolStripMenuItem,
             this.noneToolStripMenuItem});
             this.gameStartToolStripMenuItem.Name = "gameStartToolStripMenuItem";
-            this.gameStartToolStripMenuItem.Size = new System.Drawing.Size(184, 30);
+            this.gameStartToolStripMenuItem.Size = new System.Drawing.Size(211, 30);
             this.gameStartToolStripMenuItem.Text = "Game Start";
             this.gameStartToolStripMenuItem.Click += new System.EventHandler(this.startTurnToolStripMenuItem_Click);
             // 
@@ -157,6 +148,7 @@
             this.showForOpponentToolStripMenuItem.Name = "showForOpponentToolStripMenuItem";
             this.showForOpponentToolStripMenuItem.Size = new System.Drawing.Size(256, 30);
             this.showForOpponentToolStripMenuItem.Text = "Show for Opponent";
+            this.showForOpponentToolStripMenuItem.Click += new System.EventHandler(this.showForOpponentToolStripMenuItem_Click);
             // 
             // showForToolStripMenuItem
             // 
@@ -164,6 +156,7 @@
             this.showForToolStripMenuItem.Name = "showForToolStripMenuItem";
             this.showForToolStripMenuItem.Size = new System.Drawing.Size(256, 30);
             this.showForToolStripMenuItem.Text = "Show for Both";
+            this.showForToolStripMenuItem.Click += new System.EventHandler(this.showForToolStripMenuItem_Click);
             // 
             // noneToolStripMenuItem
             // 
@@ -171,6 +164,7 @@
             this.noneToolStripMenuItem.Name = "noneToolStripMenuItem";
             this.noneToolStripMenuItem.Size = new System.Drawing.Size(256, 30);
             this.noneToolStripMenuItem.Text = "None";
+            this.noneToolStripMenuItem.Click += new System.EventHandler(this.noneToolStripMenuItem_Click);
             // 
             // turnStartToolStripMenuItem
             // 
@@ -180,7 +174,7 @@
             this.showForBothToolStripMenuItem,
             this.noneToolStripMenuItem1});
             this.turnStartToolStripMenuItem.Name = "turnStartToolStripMenuItem";
-            this.turnStartToolStripMenuItem.Size = new System.Drawing.Size(184, 30);
+            this.turnStartToolStripMenuItem.Size = new System.Drawing.Size(211, 30);
             this.turnStartToolStripMenuItem.Text = "Turn Start";
             // 
             // showForPlayerToolStripMenuItem1
@@ -188,24 +182,28 @@
             this.showForPlayerToolStripMenuItem1.Name = "showForPlayerToolStripMenuItem1";
             this.showForPlayerToolStripMenuItem1.Size = new System.Drawing.Size(256, 30);
             this.showForPlayerToolStripMenuItem1.Text = "Show for Player";
+            this.showForPlayerToolStripMenuItem1.Click += new System.EventHandler(this.showForPlayerToolStripMenuItem1_Click);
             // 
             // showForOpponentToolStripMenuItem1
             // 
             this.showForOpponentToolStripMenuItem1.Name = "showForOpponentToolStripMenuItem1";
             this.showForOpponentToolStripMenuItem1.Size = new System.Drawing.Size(256, 30);
             this.showForOpponentToolStripMenuItem1.Text = "Show for Opponent";
+            this.showForOpponentToolStripMenuItem1.Click += new System.EventHandler(this.showForOpponentToolStripMenuItem1_Click);
             // 
             // showForBothToolStripMenuItem
             // 
             this.showForBothToolStripMenuItem.Name = "showForBothToolStripMenuItem";
             this.showForBothToolStripMenuItem.Size = new System.Drawing.Size(256, 30);
             this.showForBothToolStripMenuItem.Text = "Show for Both";
+            this.showForBothToolStripMenuItem.Click += new System.EventHandler(this.showForBothToolStripMenuItem_Click);
             // 
             // noneToolStripMenuItem1
             // 
             this.noneToolStripMenuItem1.Name = "noneToolStripMenuItem1";
             this.noneToolStripMenuItem1.Size = new System.Drawing.Size(256, 30);
             this.noneToolStripMenuItem1.Text = "None";
+            this.noneToolStripMenuItem1.Click += new System.EventHandler(this.noneToolStripMenuItem1_Click);
             // 
             // concedeToolStripMenuItem
             // 
@@ -215,7 +213,7 @@
             this.showForBothToolStripMenuItem1,
             this.noneToolStripMenuItem2});
             this.concedeToolStripMenuItem.Name = "concedeToolStripMenuItem";
-            this.concedeToolStripMenuItem.Size = new System.Drawing.Size(184, 30);
+            this.concedeToolStripMenuItem.Size = new System.Drawing.Size(211, 30);
             this.concedeToolStripMenuItem.Text = "Concede";
             // 
             // showForPlayerToolStripMenuItem2
@@ -223,47 +221,52 @@
             this.showForPlayerToolStripMenuItem2.Name = "showForPlayerToolStripMenuItem2";
             this.showForPlayerToolStripMenuItem2.Size = new System.Drawing.Size(256, 30);
             this.showForPlayerToolStripMenuItem2.Text = "Show for Player";
+            this.showForPlayerToolStripMenuItem2.Click += new System.EventHandler(this.showForPlayerToolStripMenuItem2_Click);
             // 
             // showForOpponentToolStripMenuItem2
             // 
             this.showForOpponentToolStripMenuItem2.Name = "showForOpponentToolStripMenuItem2";
             this.showForOpponentToolStripMenuItem2.Size = new System.Drawing.Size(256, 30);
             this.showForOpponentToolStripMenuItem2.Text = "Show for Opponent";
+            this.showForOpponentToolStripMenuItem2.Click += new System.EventHandler(this.showForOpponentToolStripMenuItem2_Click);
             // 
             // showForBothToolStripMenuItem1
             // 
             this.showForBothToolStripMenuItem1.Name = "showForBothToolStripMenuItem1";
             this.showForBothToolStripMenuItem1.Size = new System.Drawing.Size(256, 30);
             this.showForBothToolStripMenuItem1.Text = "Show for Both";
+            this.showForBothToolStripMenuItem1.Click += new System.EventHandler(this.showForBothToolStripMenuItem1_Click);
             // 
             // noneToolStripMenuItem2
             // 
             this.noneToolStripMenuItem2.Name = "noneToolStripMenuItem2";
             this.noneToolStripMenuItem2.Size = new System.Drawing.Size(256, 30);
             this.noneToolStripMenuItem2.Text = "None";
+            this.noneToolStripMenuItem2.Click += new System.EventHandler(this.noneToolStripMenuItem2_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(181, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(208, 6);
             // 
             // aboutToolStripMenuItem
             // 
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(184, 30);
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(211, 30);
             this.aboutToolStripMenuItem.Text = "About";
+            this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
             // 
             // settingsToolStripMenuItem
             // 
             this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
-            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(184, 30);
+            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(211, 30);
             this.settingsToolStripMenuItem.Text = "Settings";
             this.settingsToolStripMenuItem.Click += new System.EventHandler(this.settingsToolStripMenuItem_Click);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(184, 30);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(211, 30);
             this.exitToolStripMenuItem.Text = "Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
@@ -280,12 +283,13 @@
             this.tabControl.Multiline = true;
             this.tabControl.Name = "tabControl";
             this.tabControl.SelectedIndex = 0;
-            this.tabControl.Size = new System.Drawing.Size(703, 469);
+            this.tabControl.Size = new System.Drawing.Size(703, 497);
             this.tabControl.SizeMode = System.Windows.Forms.TabSizeMode.Fixed;
             this.tabControl.TabIndex = 1;
             // 
             // preferenceTabPage
             // 
+            this.preferenceTabPage.Controls.Add(this.preferenceErrorLabel);
             this.preferenceTabPage.Controls.Add(this.previewButton);
             this.preferenceTabPage.Controls.Add(this.notificationTextColorLabel);
             this.preferenceTabPage.Controls.Add(this.notificationTextColorPanel);
@@ -301,16 +305,81 @@
             this.preferenceTabPage.Location = new System.Drawing.Point(104, 4);
             this.preferenceTabPage.Margin = new System.Windows.Forms.Padding(0);
             this.preferenceTabPage.Name = "preferenceTabPage";
-            this.preferenceTabPage.Size = new System.Drawing.Size(595, 461);
+            this.preferenceTabPage.Size = new System.Drawing.Size(595, 489);
             this.preferenceTabPage.TabIndex = 0;
             this.preferenceTabPage.Text = "Preferences";
             this.preferenceTabPage.UseVisualStyleBackColor = true;
             this.preferenceTabPage.Click += new System.EventHandler(this.tabPage1_Click);
             // 
+            // preferenceErrorLabel
+            // 
+            this.preferenceErrorLabel.AutoSize = true;
+            this.preferenceErrorLabel.ForeColor = System.Drawing.Color.Red;
+            this.preferenceErrorLabel.Location = new System.Drawing.Point(16, 136);
+            this.preferenceErrorLabel.Name = "preferenceErrorLabel";
+            this.preferenceErrorLabel.Size = new System.Drawing.Size(0, 20);
+            this.preferenceErrorLabel.TabIndex = 16;
+            // 
+            // previewButton
+            // 
+            this.previewButton.Location = new System.Drawing.Point(20, 442);
+            this.previewButton.Name = "previewButton";
+            this.previewButton.Size = new System.Drawing.Size(95, 32);
+            this.previewButton.TabIndex = 15;
+            this.previewButton.Text = "Preview";
+            this.previewButton.UseVisualStyleBackColor = true;
+            this.previewButton.Click += new System.EventHandler(this.previewButton_Click);
+            // 
+            // notificationTextColorLabel
+            // 
+            this.notificationTextColorLabel.AutoSize = true;
+            this.notificationTextColorLabel.Location = new System.Drawing.Point(16, 250);
+            this.notificationTextColorLabel.Name = "notificationTextColorLabel";
+            this.notificationTextColorLabel.Size = new System.Drawing.Size(207, 20);
+            this.notificationTextColorLabel.TabIndex = 14;
+            this.notificationTextColorLabel.Text = "Select notification text color:";
+            // 
+            // notificationTextColorPanel
+            // 
+            this.notificationTextColorPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.notificationTextColorPanel.Location = new System.Drawing.Point(20, 273);
+            this.notificationTextColorPanel.Name = "notificationTextColorPanel";
+            this.notificationTextColorPanel.Size = new System.Drawing.Size(157, 36);
+            this.notificationTextColorPanel.TabIndex = 13;
+            // 
+            // notifBackgroundColorLabel
+            // 
+            this.notifBackgroundColorLabel.AutoSize = true;
+            this.notifBackgroundColorLabel.Location = new System.Drawing.Point(16, 167);
+            this.notifBackgroundColorLabel.Name = "notifBackgroundColorLabel";
+            this.notifBackgroundColorLabel.Size = new System.Drawing.Size(265, 20);
+            this.notifBackgroundColorLabel.TabIndex = 12;
+            this.notifBackgroundColorLabel.Text = "Select notification background color:";
+            // 
+            // notificationBackgroundColorPanel
+            // 
+            this.notificationBackgroundColorPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.notificationBackgroundColorPanel.Location = new System.Drawing.Point(20, 190);
+            this.notificationBackgroundColorPanel.Name = "notificationBackgroundColorPanel";
+            this.notificationBackgroundColorPanel.Size = new System.Drawing.Size(157, 36);
+            this.notificationBackgroundColorPanel.TabIndex = 11;
+            this.notificationBackgroundColorPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.notificationBackgroundColorPanel_Paint);
+            // 
+            // autoFocusCheckBox
+            // 
+            this.autoFocusCheckBox.AutoSize = true;
+            this.autoFocusCheckBox.Location = new System.Drawing.Point(20, 100);
+            this.autoFocusCheckBox.Name = "autoFocusCheckBox";
+            this.autoFocusCheckBox.Size = new System.Drawing.Size(408, 24);
+            this.autoFocusCheckBox.TabIndex = 10;
+            this.autoFocusCheckBox.Text = "Bring Hearthstone to the top when player turn begins";
+            this.autoFocusCheckBox.UseVisualStyleBackColor = true;
+            this.autoFocusCheckBox.CheckedChanged += new System.EventHandler(this.autoFocusCheckBox_CheckedChanged);
+            // 
             // durationLabel
             // 
             this.durationLabel.AutoSize = true;
-            this.durationLabel.Location = new System.Drawing.Point(380, 352);
+            this.durationLabel.Location = new System.Drawing.Point(380, 378);
             this.durationLabel.Name = "durationLabel";
             this.durationLabel.Size = new System.Drawing.Size(53, 20);
             this.durationLabel.TabIndex = 9;
@@ -321,7 +390,7 @@
             // durationDescriptionLabel
             // 
             this.durationDescriptionLabel.AutoSize = true;
-            this.durationDescriptionLabel.Location = new System.Drawing.Point(16, 298);
+            this.durationDescriptionLabel.Location = new System.Drawing.Point(16, 324);
             this.durationDescriptionLabel.Name = "durationDescriptionLabel";
             this.durationDescriptionLabel.Size = new System.Drawing.Size(306, 20);
             this.durationDescriptionLabel.TabIndex = 5;
@@ -330,7 +399,7 @@
             // 
             // durationBar
             // 
-            this.durationBar.Location = new System.Drawing.Point(20, 329);
+            this.durationBar.Location = new System.Drawing.Point(20, 355);
             this.durationBar.Maximum = 300;
             this.durationBar.Name = "durationBar";
             this.durationBar.Size = new System.Drawing.Size(354, 69);
@@ -374,60 +443,6 @@
             this.hideNotifCheckBox.UseVisualStyleBackColor = true;
             this.hideNotifCheckBox.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
             // 
-            // aboutTabPage
-            // 
-            this.aboutTabPage.Controls.Add(this.versionLabel);
-            this.aboutTabPage.Controls.Add(this.casualStoneLabel);
-            this.aboutTabPage.Controls.Add(this.pictureBox1);
-            this.aboutTabPage.Location = new System.Drawing.Point(104, 4);
-            this.aboutTabPage.Name = "aboutTabPage";
-            this.aboutTabPage.Padding = new System.Windows.Forms.Padding(3);
-            this.aboutTabPage.Size = new System.Drawing.Size(595, 461);
-            this.aboutTabPage.TabIndex = 1;
-            this.aboutTabPage.Text = "About";
-            this.aboutTabPage.UseVisualStyleBackColor = true;
-            // 
-            // updatesTabPage
-            // 
-            this.updatesTabPage.Location = new System.Drawing.Point(104, 4);
-            this.updatesTabPage.Name = "updatesTabPage";
-            this.updatesTabPage.Padding = new System.Windows.Forms.Padding(3);
-            this.updatesTabPage.Size = new System.Drawing.Size(595, 461);
-            this.updatesTabPage.TabIndex = 2;
-            this.updatesTabPage.Text = "Updates";
-            this.updatesTabPage.UseVisualStyleBackColor = true;
-            // 
-            // cancelButton
-            // 
-            this.cancelButton.Location = new System.Drawing.Point(515, 501);
-            this.cancelButton.Name = "cancelButton";
-            this.cancelButton.Size = new System.Drawing.Size(95, 32);
-            this.cancelButton.TabIndex = 8;
-            this.cancelButton.Text = "Cancel";
-            this.cancelButton.UseVisualStyleBackColor = true;
-            this.cancelButton.Click += new System.EventHandler(this.cancelButton_Click);
-            // 
-            // okButton
-            // 
-            this.okButton.Location = new System.Drawing.Point(414, 501);
-            this.okButton.Name = "okButton";
-            this.okButton.Size = new System.Drawing.Size(95, 32);
-            this.okButton.TabIndex = 7;
-            this.okButton.Text = "Okey";
-            this.okButton.UseVisualStyleBackColor = true;
-            this.okButton.Click += new System.EventHandler(this.okButton_Click);
-            // 
-            // applyButton
-            // 
-            this.applyButton.Enabled = false;
-            this.applyButton.Location = new System.Drawing.Point(616, 501);
-            this.applyButton.Name = "applyButton";
-            this.applyButton.Size = new System.Drawing.Size(95, 32);
-            this.applyButton.TabIndex = 6;
-            this.applyButton.Text = "Apply";
-            this.applyButton.UseVisualStyleBackColor = true;
-            this.applyButton.Click += new System.EventHandler(this.applyButton_Click);
-            // 
             // accountTabPage
             // 
             this.accountTabPage.Controls.Add(this.clearUsernameButton);
@@ -440,66 +455,66 @@
             this.accountTabPage.Location = new System.Drawing.Point(104, 4);
             this.accountTabPage.Name = "accountTabPage";
             this.accountTabPage.Padding = new System.Windows.Forms.Padding(3);
-            this.accountTabPage.Size = new System.Drawing.Size(595, 461);
+            this.accountTabPage.Size = new System.Drawing.Size(595, 489);
             this.accountTabPage.TabIndex = 3;
             this.accountTabPage.Text = "Accounts";
             this.accountTabPage.UseVisualStyleBackColor = true;
             this.accountTabPage.Click += new System.EventHandler(this.accountTabPage_Click);
             // 
-            // autoFocusCheckBox
+            // clearUsernameButton
             // 
-            this.autoFocusCheckBox.AutoSize = true;
-            this.autoFocusCheckBox.Location = new System.Drawing.Point(20, 100);
-            this.autoFocusCheckBox.Name = "autoFocusCheckBox";
-            this.autoFocusCheckBox.Size = new System.Drawing.Size(408, 24);
-            this.autoFocusCheckBox.TabIndex = 10;
-            this.autoFocusCheckBox.Text = "Bring Hearthstone to the top when player turn begins";
-            this.autoFocusCheckBox.UseVisualStyleBackColor = true;
+            this.clearUsernameButton.Location = new System.Drawing.Point(262, 318);
+            this.clearUsernameButton.Name = "clearUsernameButton";
+            this.clearUsernameButton.Size = new System.Drawing.Size(95, 32);
+            this.clearUsernameButton.TabIndex = 6;
+            this.clearUsernameButton.Text = "Clear";
+            this.clearUsernameButton.UseVisualStyleBackColor = true;
+            this.clearUsernameButton.Click += new System.EventHandler(this.clearUsernameButton_Click);
             // 
-            // notificationBackgroundColorPanel
+            // removeUsernameButton
             // 
-            this.notificationBackgroundColorPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.notificationBackgroundColorPanel.Location = new System.Drawing.Point(20, 164);
-            this.notificationBackgroundColorPanel.Name = "notificationBackgroundColorPanel";
-            this.notificationBackgroundColorPanel.Size = new System.Drawing.Size(157, 36);
-            this.notificationBackgroundColorPanel.TabIndex = 11;
-            this.notificationBackgroundColorPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.notificationBackgroundColorPanel_Paint);
+            this.removeUsernameButton.Location = new System.Drawing.Point(262, 280);
+            this.removeUsernameButton.Name = "removeUsernameButton";
+            this.removeUsernameButton.Size = new System.Drawing.Size(95, 32);
+            this.removeUsernameButton.TabIndex = 5;
+            this.removeUsernameButton.Text = "Remove";
+            this.removeUsernameButton.UseVisualStyleBackColor = true;
+            this.removeUsernameButton.Click += new System.EventHandler(this.removeUsernameButton_Click);
             // 
-            // notifBackgroundColorLabel
+            // usernameErrorLabel
             // 
-            this.notifBackgroundColorLabel.AutoSize = true;
-            this.notifBackgroundColorLabel.Location = new System.Drawing.Point(16, 141);
-            this.notifBackgroundColorLabel.Name = "notifBackgroundColorLabel";
-            this.notifBackgroundColorLabel.Size = new System.Drawing.Size(265, 20);
-            this.notifBackgroundColorLabel.TabIndex = 12;
-            this.notifBackgroundColorLabel.Text = "Select notification background color:";
+            this.usernameErrorLabel.AutoSize = true;
+            this.usernameErrorLabel.ForeColor = System.Drawing.Color.Red;
+            this.usernameErrorLabel.Location = new System.Drawing.Point(32, 195);
+            this.usernameErrorLabel.Name = "usernameErrorLabel";
+            this.usernameErrorLabel.Size = new System.Drawing.Size(0, 20);
+            this.usernameErrorLabel.TabIndex = 4;
             // 
-            // notificationTextColorPanel
+            // addUsernameButton
             // 
-            this.notificationTextColorPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.notificationTextColorPanel.Location = new System.Drawing.Point(20, 247);
-            this.notificationTextColorPanel.Name = "notificationTextColorPanel";
-            this.notificationTextColorPanel.Size = new System.Drawing.Size(157, 36);
-            this.notificationTextColorPanel.TabIndex = 13;
+            this.addUsernameButton.Location = new System.Drawing.Point(262, 222);
+            this.addUsernameButton.Name = "addUsernameButton";
+            this.addUsernameButton.Size = new System.Drawing.Size(95, 32);
+            this.addUsernameButton.TabIndex = 3;
+            this.addUsernameButton.Text = "Add";
+            this.addUsernameButton.UseVisualStyleBackColor = true;
+            this.addUsernameButton.Click += new System.EventHandler(this.addUsernameButton_Click);
             // 
-            // notificationTextColorLabel
+            // usernameTextBox
             // 
-            this.notificationTextColorLabel.AutoSize = true;
-            this.notificationTextColorLabel.Location = new System.Drawing.Point(16, 224);
-            this.notificationTextColorLabel.Name = "notificationTextColorLabel";
-            this.notificationTextColorLabel.Size = new System.Drawing.Size(207, 20);
-            this.notificationTextColorLabel.TabIndex = 14;
-            this.notificationTextColorLabel.Text = "Select notification text color:";
+            this.usernameTextBox.Location = new System.Drawing.Point(36, 222);
+            this.usernameTextBox.Name = "usernameTextBox";
+            this.usernameTextBox.Size = new System.Drawing.Size(202, 26);
+            this.usernameTextBox.TabIndex = 2;
             // 
-            // previewButton
+            // usernameListBox
             // 
-            this.previewButton.Location = new System.Drawing.Point(20, 416);
-            this.previewButton.Name = "previewButton";
-            this.previewButton.Size = new System.Drawing.Size(95, 32);
-            this.previewButton.TabIndex = 15;
-            this.previewButton.Text = "Preview";
-            this.previewButton.UseVisualStyleBackColor = true;
-            this.previewButton.Click += new System.EventHandler(this.previewButton_Click);
+            this.usernameListBox.FormattingEnabled = true;
+            this.usernameListBox.ItemHeight = 20;
+            this.usernameListBox.Location = new System.Drawing.Point(36, 280);
+            this.usernameListBox.Name = "usernameListBox";
+            this.usernameListBox.Size = new System.Drawing.Size(202, 104);
+            this.usernameListBox.TabIndex = 1;
             // 
             // accountLabel
             // 
@@ -513,66 +528,61 @@
             this.accountLabel.Text = resources.GetString("accountLabel.Text");
             this.accountLabel.Click += new System.EventHandler(this.accountLabel_Click);
             // 
-            // contextMenuStrip1
+            // updatesTabPage
             // 
-            this.contextMenuStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
-            this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(74, 4);
+            this.updatesTabPage.Controls.Add(this.updateLinkLabel);
+            this.updatesTabPage.Controls.Add(this.updateLabel);
+            this.updatesTabPage.Controls.Add(this.updatePictureBox);
+            this.updatesTabPage.Location = new System.Drawing.Point(104, 4);
+            this.updatesTabPage.Name = "updatesTabPage";
+            this.updatesTabPage.Padding = new System.Windows.Forms.Padding(3);
+            this.updatesTabPage.Size = new System.Drawing.Size(595, 489);
+            this.updatesTabPage.TabIndex = 2;
+            this.updatesTabPage.Text = "Updates";
+            this.updatesTabPage.UseVisualStyleBackColor = true;
+            this.updatesTabPage.Click += new System.EventHandler(this.updatesTabPage_Click);
             // 
-            // usernameListBox
+            // updateLinkLabel
             // 
-            this.usernameListBox.FormattingEnabled = true;
-            this.usernameListBox.ItemHeight = 20;
-            this.usernameListBox.Location = new System.Drawing.Point(36, 280);
-            this.usernameListBox.Name = "usernameListBox";
-            this.usernameListBox.Size = new System.Drawing.Size(202, 104);
-            this.usernameListBox.TabIndex = 1;
+            this.updateLinkLabel.AutoSize = true;
+            this.updateLinkLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.updateLinkLabel.Location = new System.Drawing.Point(55, 328);
+            this.updateLinkLabel.Name = "updateLinkLabel";
+            this.updateLinkLabel.Size = new System.Drawing.Size(0, 20);
+            this.updateLinkLabel.TabIndex = 2;
             // 
-            // usernameTextBox
+            // updateLabel
             // 
-            this.usernameTextBox.Location = new System.Drawing.Point(36, 222);
-            this.usernameTextBox.Name = "usernameTextBox";
-            this.usernameTextBox.Size = new System.Drawing.Size(202, 26);
-            this.usernameTextBox.TabIndex = 2;
+            this.updateLabel.AutoSize = true;
+            this.updateLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.updateLabel.Location = new System.Drawing.Point(166, 191);
+            this.updateLabel.Name = "updateLabel";
+            this.updateLabel.Size = new System.Drawing.Size(172, 20);
+            this.updateLabel.TabIndex = 1;
+            this.updateLabel.Text = "Checking for updates...";
             // 
-            // addUsernameButton
+            // updatePictureBox
             // 
-            this.addUsernameButton.Location = new System.Drawing.Point(262, 222);
-            this.addUsernameButton.Name = "addUsernameButton";
-            this.addUsernameButton.Size = new System.Drawing.Size(95, 32);
-            this.addUsernameButton.TabIndex = 3;
-            this.addUsernameButton.Text = "Add";
-            this.addUsernameButton.UseVisualStyleBackColor = true;
-            this.addUsernameButton.Click += new System.EventHandler(this.addUsernameButton_Click);
+            this.updatePictureBox.Image = global::CasualStone.Properties.Resources._284;
+            this.updatePictureBox.Location = new System.Drawing.Point(19, 171);
+            this.updatePictureBox.Name = "updatePictureBox";
+            this.updatePictureBox.Size = new System.Drawing.Size(124, 124);
+            this.updatePictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.updatePictureBox.TabIndex = 0;
+            this.updatePictureBox.TabStop = false;
             // 
-            // usernameErrorLabel
+            // aboutTabPage
             // 
-            this.usernameErrorLabel.AutoSize = true;
-            this.usernameErrorLabel.ForeColor = System.Drawing.Color.Red;
-            this.usernameErrorLabel.Location = new System.Drawing.Point(32, 195);
-            this.usernameErrorLabel.Name = "usernameErrorLabel";
-            this.usernameErrorLabel.Size = new System.Drawing.Size(0, 20);
-            this.usernameErrorLabel.TabIndex = 4;
-            // 
-            // removeUsernameButton
-            // 
-            this.removeUsernameButton.Location = new System.Drawing.Point(262, 280);
-            this.removeUsernameButton.Name = "removeUsernameButton";
-            this.removeUsernameButton.Size = new System.Drawing.Size(95, 32);
-            this.removeUsernameButton.TabIndex = 5;
-            this.removeUsernameButton.Text = "Remove";
-            this.removeUsernameButton.UseVisualStyleBackColor = true;
-            this.removeUsernameButton.Click += new System.EventHandler(this.removeUsernameButton_Click);
-            // 
-            // clearUsernameButton
-            // 
-            this.clearUsernameButton.Location = new System.Drawing.Point(262, 318);
-            this.clearUsernameButton.Name = "clearUsernameButton";
-            this.clearUsernameButton.Size = new System.Drawing.Size(95, 32);
-            this.clearUsernameButton.TabIndex = 6;
-            this.clearUsernameButton.Text = "Clear";
-            this.clearUsernameButton.UseVisualStyleBackColor = true;
-            this.clearUsernameButton.Click += new System.EventHandler(this.clearUsernameButton_Click);
+            this.aboutTabPage.Controls.Add(this.versionLabel);
+            this.aboutTabPage.Controls.Add(this.casualStoneLabel);
+            this.aboutTabPage.Controls.Add(this.pictureBox1);
+            this.aboutTabPage.Location = new System.Drawing.Point(104, 4);
+            this.aboutTabPage.Name = "aboutTabPage";
+            this.aboutTabPage.Padding = new System.Windows.Forms.Padding(3);
+            this.aboutTabPage.Size = new System.Drawing.Size(595, 489);
+            this.aboutTabPage.TabIndex = 1;
+            this.aboutTabPage.Text = "About";
+            this.aboutTabPage.UseVisualStyleBackColor = true;
             // 
             // versionLabel
             // 
@@ -583,6 +593,7 @@
             this.versionLabel.Size = new System.Drawing.Size(323, 51);
             this.versionLabel.TabIndex = 5;
             this.versionLabel.Text = "Copyright © Sean Konagaya. All Rights Reserved.\r\n\r\nVersion 0.0.1 | KONAGAYA.IO";
+            this.versionLabel.Click += new System.EventHandler(this.versionLabel_Click_1);
             // 
             // casualStoneLabel
             // 
@@ -604,11 +615,48 @@
             this.pictureBox1.TabIndex = 3;
             this.pictureBox1.TabStop = false;
             // 
+            // cancelButton
+            // 
+            this.cancelButton.Location = new System.Drawing.Point(519, 523);
+            this.cancelButton.Name = "cancelButton";
+            this.cancelButton.Size = new System.Drawing.Size(95, 32);
+            this.cancelButton.TabIndex = 8;
+            this.cancelButton.Text = "Cancel";
+            this.cancelButton.UseVisualStyleBackColor = true;
+            this.cancelButton.Click += new System.EventHandler(this.cancelButton_Click);
+            // 
+            // okButton
+            // 
+            this.okButton.Location = new System.Drawing.Point(418, 523);
+            this.okButton.Name = "okButton";
+            this.okButton.Size = new System.Drawing.Size(95, 32);
+            this.okButton.TabIndex = 7;
+            this.okButton.Text = "Okey";
+            this.okButton.UseVisualStyleBackColor = true;
+            this.okButton.Click += new System.EventHandler(this.okButton_Click);
+            // 
+            // applyButton
+            // 
+            this.applyButton.Enabled = false;
+            this.applyButton.Location = new System.Drawing.Point(620, 523);
+            this.applyButton.Name = "applyButton";
+            this.applyButton.Size = new System.Drawing.Size(95, 32);
+            this.applyButton.TabIndex = 6;
+            this.applyButton.Text = "Apply";
+            this.applyButton.UseVisualStyleBackColor = true;
+            this.applyButton.Click += new System.EventHandler(this.applyButton_Click);
+            // 
+            // contextMenuStrip1
+            // 
+            this.contextMenuStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(74, 4);
+            // 
             // CasualStoneForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(727, 545);
+            this.ClientSize = new System.Drawing.Size(727, 567);
             this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.tabControl);
             this.Controls.Add(this.okButton);
@@ -618,15 +666,17 @@
             this.Text = "Preferences";
             this.Load += new System.EventHandler(this.CasualStoneForm_Load);
             this.mainMenuStrip.ResumeLayout(false);
-            this.mainMenuStrip.PerformLayout();
             this.tabControl.ResumeLayout(false);
             this.preferenceTabPage.ResumeLayout(false);
             this.preferenceTabPage.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.durationBar)).EndInit();
-            this.aboutTabPage.ResumeLayout(false);
-            this.aboutTabPage.PerformLayout();
             this.accountTabPage.ResumeLayout(false);
             this.accountTabPage.PerformLayout();
+            this.updatesTabPage.ResumeLayout(false);
+            this.updatesTabPage.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.updatePictureBox)).EndInit();
+            this.aboutTabPage.ResumeLayout(false);
+            this.aboutTabPage.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
 
@@ -637,7 +687,6 @@
         private System.Windows.Forms.ContextMenuStrip mainMenuStrip;
         private System.Windows.Forms.ToolStripMenuItem gameStartToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem turnStartToolStripMenuItem;
-        private System.Windows.Forms.ToolStripTextBox usernameDisplayTextBox;
         private System.Windows.Forms.ToolStripMenuItem showForPlayerToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem showForOpponentToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem showForToolStripMenuItem;
@@ -654,7 +703,6 @@
         private System.Windows.Forms.ToolStripMenuItem showForOpponentToolStripMenuItem2;
         private System.Windows.Forms.ToolStripMenuItem showForBothToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem noneToolStripMenuItem2;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripMenuItem settingsToolStripMenuItem;
         private System.Windows.Forms.TabControl tabControl;
         private System.Windows.Forms.TabPage preferenceTabPage;
@@ -689,6 +737,10 @@
         private System.Windows.Forms.Label versionLabel;
         private System.Windows.Forms.Label casualStoneLabel;
         private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.PictureBox updatePictureBox;
+        private System.Windows.Forms.Label updateLabel;
+        private System.Windows.Forms.LinkLabel updateLinkLabel;
+        private System.Windows.Forms.Label preferenceErrorLabel;
     }
 }
 
