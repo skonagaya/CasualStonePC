@@ -82,5 +82,89 @@ namespace CasualStone.Properties {
                 this["CONCEDE"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool hideNotifEnabled {
+            get {
+                return ((bool)(this["hideNotifEnabled"]));
+            }
+            set {
+                this["hideNotifEnabled"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool showHSEnabled {
+            get {
+                return ((bool)(this["showHSEnabled"]));
+            }
+            set {
+                this["showHSEnabled"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool closeAllEnabled {
+            get {
+                return ((bool)(this["closeAllEnabled"]));
+            }
+            set {
+                this["closeAllEnabled"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int autoCloseDuration {
+            get {
+                return ((int)(this["autoCloseDuration"]));
+            }
+            set {
+                this["autoCloseDuration"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool autoFocusEnabled {
+            get {
+                return ((bool)(this["autoFocusEnabled"]));
+            }
+            set {
+                this["autoFocusEnabled"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Black")]
+        public global::System.Drawing.Color notifBgColor {
+            get {
+                return ((global::System.Drawing.Color)(this["notifBgColor"]));
+            }
+            set {
+                this["notifBgColor"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("White")]
+        public global::System.Drawing.Color notifTextColor {
+            get {
+                return ((global::System.Drawing.Color)(this["notifTextColor"]));
+            }
+            set {
+                this["notifTextColor"] = value;
+            }
+        }
     }
 }

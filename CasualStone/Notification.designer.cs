@@ -28,7 +28,7 @@ namespace ToastNotifications
         /// Required method for Designer support - do not modify
         /// the contents of this method with the code editor.
         /// </summary>
-        private void InitializeComponent(string imageName)
+        private void InitializeComponent(string imageName, Color bgColor, Color txtColor)
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Notification));
@@ -44,9 +44,9 @@ namespace ToastNotifications
             // 
             // labelTitle
             // 
-            this.labelTitle.BackColor = System.Drawing.Color.Black;
+            this.labelTitle.BackColor = bgColor;
             this.labelTitle.Font = new System.Drawing.Font("Calibri", 10F, System.Drawing.FontStyle.Bold);
-            this.labelTitle.ForeColor = System.Drawing.Color.Gainsboro;
+            this.labelTitle.ForeColor = txtColor;
             this.labelTitle.Location = new System.Drawing.Point(161, 48);
             this.labelTitle.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.labelTitle.Name = "labelTitle";
@@ -58,7 +58,7 @@ namespace ToastNotifications
             // 
             // iconBox
             // 
-            //this.iconBox.BackColor = System.Drawing.Color.White;
+            this.iconBox.BackColor = bgColor;
             this.iconBox.ErrorImage = ((System.Drawing.Image)(resources.GetObject("warning.Image")));
             this.iconBox.Image = ((System.Drawing.Image)(resources.GetObject(imageName)));
             this.iconBox.Location = new System.Drawing.Point(5, 5);
@@ -73,7 +73,7 @@ namespace ToastNotifications
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 24F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.Black;
+            this.BackColor = bgColor;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(500, 144);
             this.ControlBox = false;
@@ -87,7 +87,7 @@ namespace ToastNotifications
             //this.Opacity = 0.7D;
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
-            this.Text = "EDGE Shop Flag Notification";
+            this.Text = "Look away. Nothing to see here.";
             this.TopMost = true;
             this.Activated += new System.EventHandler(this.Notification_Activated);
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Notification_FormClosed);

@@ -13,6 +13,8 @@ namespace ToastNotifications
     public partial class Notification : Form
     {
         private static List<Notification> openNotifications = new List<Notification>();
+        private static bool closeAllEnabled;
+        private static bool showHSEnabled;
         private bool _allowFocus;
         private readonly FormAnimator _animator;
         private IntPtr _currentForegroundWindow;
@@ -24,12 +26,14 @@ namespace ToastNotifications
         /// <param name="duration"></param>
         /// <param name="animation"></param>
         /// <param name="direction"></param>
-        public Notification(string body, string imageName,  int duration)
+        public Notification(string body, string imageName,  int duration, bool closeAllNotifEnabled, bool showHSNotifEnabled, Color bgColor, Color txtColor)
         {
-            InitializeComponent(imageName);
+            InitializeComponent(imageName, bgColor, txtColor);
 
+            closeAllEnabled = closeAllNotifEnabled;
+            showHSEnabled = showHSNotifEnabled;
 
-            if (duration < 0)
+            if (duration < 1)
                 duration = int.MaxValue;
             else
                 duration = duration * 1000;
@@ -37,7 +41,7 @@ namespace ToastNotifications
             lifeTimer.Interval = duration;
             labelTitle.Text = body;
 
-            _animator = new FormAnimator(this, FormAnimator.AnimationMethod.Slide, FormAnimator.AnimationDirection.Left, 500);
+            _animator = new FormAnimator(this, FormAnimator.AnimationMethod.Fade, FormAnimator.AnimationDirection.Left, 300);
             //System.Drawing.Drawing2D.GraphicsPath buttonPath = new System.Drawing.Drawing2D.GraphicsPath();
             //Region = Region.
             //Region = Region.FromHrgn(new IntPtr())
@@ -69,7 +73,7 @@ namespace ToastNotifications
         private void Notification_Load(object sender, EventArgs e)
         {
             // Display the form just above the system tray.
-            Location = new Point(   Screen.PrimaryScreen.WorkingArea.Width - Width - 10,
+            Location = new Point(Screen.PrimaryScreen.WorkingArea.Width - Width - 10,
                                     10
                                     );
 
@@ -77,9 +81,11 @@ namespace ToastNotifications
             foreach (Notification openForm in openNotifications)
             {
                 openForm.Top += Height + 10;
+                //openForm.setOpenNotifications(openNotifications);
             }
 
             openNotifications.Add(this);
+
             lifeTimer.Start();
         }
 
@@ -102,21 +108,36 @@ namespace ToastNotifications
             _animator.Duration = 0;
             _animator.Direction = FormAnimator.AnimationDirection.Right;
         }
-
+        
         private void Notification_FormClosed(object sender, FormClosedEventArgs e)
         {
-            // Move down any open forms above this one
-            foreach (Notification openForm in openNotifications)
+            // Close all  
+            if (closeAllEnabled)
             {
-                if (openForm == this)
+                openNotifications.Remove(this);
+                while (openNotifications.Count > 0)
                 {
-                    // Remaining forms are above this one
-                    break;
+                    openNotifications[openNotifications.Count-1].Close();
                 }
-                openForm.Top -= Height;
+            }
+            // Close single
+            else
+            {
+                // Move down any open forms above this one
+                foreach (Notification openForm in openNotifications)
+                {
+                    if (openForm == this)
+                    {
+                        // Remaining forms are above this one
+                        break;
+                    }
+                    openForm.Top -= Height;
+                }
+
+                openNotifications.Remove(this);
             }
 
-            openNotifications.Remove(this);
+            //openNotifications.Remove(this);
         }
 
         private void lifeTimer_Tick(object sender, EventArgs e)
@@ -126,16 +147,22 @@ namespace ToastNotifications
 
         private void Notification_Click(object sender, EventArgs e)
         {
+
+            if (showHSEnabled) FocusProcess("Hearthstone");
             Close();
         }
 
         private void labelTitle_Click(object sender, EventArgs e)
         {
+
+            if (showHSEnabled) FocusProcess("Hearthstone");
             Close();
         }
 
         private void labelRO_Click(object sender, EventArgs e)
         {
+
+            if (showHSEnabled) FocusProcess("Hearthstone");
             Close();
         }
 
@@ -144,8 +171,7 @@ namespace ToastNotifications
 
         private void iconBox_Click(object sender, EventArgs e)
         {
-            Console.WriteLine("clicked on the iconbox");
-            FocusProcess("Hearthstone");
+            if (showHSEnabled) FocusProcess("Hearthstone");
             Close();
         }
         
@@ -164,6 +190,10 @@ namespace ToastNotifications
                 SetForegroundWindow(objProcesses[0].MainWindowHandle);
             }
         }
-        
+
+        private void Notification_Load_1(object sender, EventArgs e)
+        {
+
+        }
     }
 }

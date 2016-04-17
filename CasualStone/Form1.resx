@@ -219,4 +219,20 @@
         AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 </value>
   </data>
+  <metadata name="backgroundWorker1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>626, 17</value>
+  </metadata>
+  <metadata name="colorDialog.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>856, 17</value>
+  </metadata>
+  <data name="accountLabel.Text" xml:space="preserve">
+    <value>CasualStone uses usernames entered below to distinguish between the Player and the Opponent. "Show for Opponent" and "Show for Player" options are enabled only after at least one valid username is entered below. 
+
+Multiple usernames may be entered for alternative accounts.
+
+Enter username below:</value>
+  </data>
+  <metadata name="contextMenuStrip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>1012, 17</value>
+  </metadata>
 </root>

@@ -24,11 +24,8 @@ namespace CasualStone
         [STAThread]
         static void Main()
         {
-
             String checkpoint;
-
-            var toastNotification = new Notification("asdf", "warning", 5);
-            toastNotification.Show();
+            var toastNotification1 = new Notification("", "", 0, Properties.Settings.Default.closeAllEnabled, Properties.Settings.Default.showHSEnabled, Properties.Settings.Default.notifBgColor, Properties.Settings.Default.notifTextColor);
 
             String hearthStoneInstallPath = getHearthstoneInstallPath();
             String logPath = hearthStoneInstallPath + @"\Logs";
@@ -36,15 +33,10 @@ namespace CasualStone
 
             assertLogFile(logFileName, logPath);
 
-            HearthLogReader tws = new HearthLogReader( logFileName);
-
-            tws.getRolling();
 
             Application.EnableVisualStyles();
             //Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new CasualStoneForm());
-            
-            //checkpoint = Console.ReadLine();
+            Application.Run(new CasualStoneForm(logFileName));
         }
         
 
@@ -190,14 +182,31 @@ public class HearthLogReader
     // State information used in the task.
     private string logFileName;
 
+    private bool hideNotifEnabled;
+    private bool closeAllNotifEnabled;
+    private bool showHSEnabled;
+    private bool autoFocusHSEnabled;
+    private int notifDuration;
+
+    private System.Drawing.Color bgColor;
+    private System.Drawing.Color txtColor;
 
     private BackgroundWorker bgLogReader;
+    //private static List<Notification> openNotifications = new List<Notification>();
 
     // The constructor obtains the state information and the
     // callback delegate.
-    public HearthLogReader(string logFileName)
+    public HearthLogReader(string logFileName, bool hideNotifEnabled, bool closeAllNotifEnabled, bool showHSEnabled, bool autoFocusHSEnabled, int notifDuration, System.Drawing.Color bgColor, System.Drawing.Color txtColor)
     {
         this.logFileName = logFileName;
+        this.hideNotifEnabled = hideNotifEnabled;
+        this.closeAllNotifEnabled = closeAllNotifEnabled;
+        this.showHSEnabled = showHSEnabled;
+        this.autoFocusHSEnabled = autoFocusHSEnabled;
+        this.notifDuration = notifDuration;
+        this.bgColor = bgColor;
+        this.txtColor = txtColor;
+
         bgLogReader = new BackgroundWorker();
 
         // Create a background worker thread that ReportsProgress &
@@ -209,8 +218,18 @@ public class HearthLogReader
 
     }
 
+    public void updatePreferences(bool hideNotifEnabled, bool closeAllNotifEnabled, bool showHSEnabled, bool autoFocusHSEnabled, int notifDuration)
+    {
+        this.hideNotifEnabled = hideNotifEnabled;
+        this.closeAllNotifEnabled = closeAllNotifEnabled;
+        this.showHSEnabled = showHSEnabled;
+        this.autoFocusHSEnabled = autoFocusHSEnabled;
+        this.notifDuration = notifDuration;
+    }
+
     public void getRolling()
     {
+        Console.Write("Waiting for Hearthstone to start in order to start polling logs"); //logdis
         bgLogReader.RunWorkerAsync(this.logFileName);
     }
 
@@ -222,40 +241,66 @@ public class HearthLogReader
     /// <param name="e"></param>
     void queueReader(object sender, RunWorkerCompletedEventArgs e)
     {
-
         string[] results = (string[])e.Result;
-        Console.WriteLine(results[0] + ": " + results[1]);
-
-        //TODO catch response array null case
-
-        string text = "";
-        string imageName = "";
-        switch (results[0])
+        if (results != null)
         {
-            case "CREATE_GAME":
-                text = "Game is starting...";
-                imageName = "start";
-                break;
-            case "CONCEDE":
-                text = results[1] + " conceded";
-                imageName = "concede";
-                break;
-            case "START_TURN":
-                text = results[1] + "'s turn";
-                imageName = "turn";
-                break;
-            default:
-                Console.WriteLine("Call back got an event that's not mapped. This should never happen"); //logdis
-                text = "Error occured";
-                imageName = "warning";
-                break;
-        }
+            Console.WriteLine(results[0] + ": " + results[1]);
 
-        var toastNotification = new Notification(text, imageName, -1);
-        toastNotification.Show();
+            //TODO catch response array null case
+
+            string text = "";
+            string imageName = "";
+            switch (results[0])
+            {
+                case "CREATE_GAME":
+                    text = "Game is starting...";
+                    imageName = "start";
+                    break;
+                case "CONCEDE":
+                    text = results[1] + " conceded";
+                    imageName = "concede";
+                    break;
+                case "START_TURN":
+                    text = results[1] + "'s turn";
+                    imageName = "turn";
+                    break;
+                default:
+                    Console.WriteLine("Call back got an event that's not mapped. This should never happen"); //logdis
+                    text = "Error occured";
+                    imageName = "warning";
+                    break;
+            }
+            if (!this.hideNotifEnabled || (this.hideNotifEnabled && !processIsFocused("Hearthstone")))
+            {
+                var toastNotification = new Notification(text, imageName, this.notifDuration, this.closeAllNotifEnabled, this.showHSEnabled, this.bgColor, this.txtColor);
+                toastNotification.Show();
+            }
+        }
+        
         bgLogReader.RunWorkerAsync(this.logFileName);
 
     }
+
+    private bool processRunning(string procName)
+    {
+        return System.Diagnostics.Process.GetProcessesByName(procName).Length > 0;
+    }
+
+    private bool processIsFocused(string procName)
+    {
+
+        IntPtr hWnd = GetForegroundWindow();
+        uint procId = 0;
+        GetWindowThreadProcessId(hWnd, out procId);
+        var proc = Process.GetProcessById((int)procId);
+        return proc.MainModule.ToString().Contains(procName);
+    }
+
+    [DllImport("user32.dll")]
+    public static extern IntPtr GetForegroundWindow();
+
+    [DllImport("user32.dll", SetLastError = true)]
+    public static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint lpdwProcessId);
 
     /// <summary>
     /// Time consuming operations go here </br>
@@ -265,10 +310,19 @@ public class HearthLogReader
     /// <param name="e"></param>
     void startReader(object sender, DoWorkEventArgs e)
     {
-        string logFileName = (string)e.Argument;
         try
         {
-            using (StreamReader reader = new StreamReader(new FileStream(logFileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)))
+            if (!processRunning("Hearthstone"))
+            {
+                System.Threading.Thread.Sleep(3000);
+                Console.Write(".");
+                return;
+            } else
+            {
+                Console.WriteLine("");
+                Console.WriteLine("Found Hearthstone. Starting StreamReader.");
+            }
+            using (StreamReader reader = new StreamReader(new FileStream(this.logFileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)))
             {
                 //start at the end of the file
                 long lastMaxOffset = reader.BaseStream.Length;
@@ -276,11 +330,26 @@ public class HearthLogReader
 
                 while (true)
                 {
+                    //Console.Write(".");
+                    System.Threading.Thread.Sleep(300);
+                    //Console.Write("!");
 
-                    System.Threading.Thread.Sleep(100);
+                    if (!processRunning("Hearthstone"))
+                    {
+                        Console.WriteLine("Hearthstone process was not found");
+                        return;
+                    }
+
 
                     //if the file size has not changed, idle
-                    if (reader.BaseStream.Length == lastMaxOffset) continue;
+                    if (reader.BaseStream.Length == lastMaxOffset)
+                    {
+                        continue;
+                    }else if (reader.BaseStream.Length < lastMaxOffset)
+                    {
+                        Console.WriteLine("Setting new offset because log file was truncated"); //logdis
+                        lastMaxOffset = 0;//reader.BaseStream.Length;
+                    }
 
                     //seek to the last max offset
                     reader.BaseStream.Seek(lastMaxOffset, SeekOrigin.Begin);
