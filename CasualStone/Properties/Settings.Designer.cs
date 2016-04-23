@@ -165,5 +165,17 @@ namespace CasualStone.Properties {
                 this["notifTextColor"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string hearthstoneInstallPath {
+            get {
+                return ((string)(this["hearthstoneInstallPath"]));
+            }
+            set {
+                this["hearthstoneInstallPath"] = value;
+            }
+        }
     }
 }

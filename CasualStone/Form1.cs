@@ -23,10 +23,59 @@ namespace CasualStone
         private HearthLogReader sasquatch;
         private WebClient tenenbaum;
 
-        public CasualStoneForm(string logFileName)
+        public CasualStoneForm()
         {
             InitializeComponent();
-            
+            //this.MaximumSize = this.MinimumSize = this.Size;
+
+            // initialize username list
+            if (Properties.Settings.Default.Usernames == null)
+            {
+                Properties.Settings.Default.Usernames = new System.Collections.Specialized.StringCollection();
+                Properties.Settings.Default.Save();
+            }
+
+            string logPath;
+            string hearthstoneInstallPath;
+            if (Properties.Settings.Default.hearthstoneInstallPath != "" &&
+                Properties.Settings.Default.hearthstoneInstallPath != null)
+            {
+                hearthstoneInstallPath = Properties.Settings.Default.hearthstoneInstallPath;
+            }
+            else
+            {
+                string hearthstoneRegistryPath;
+                if (userRunning64Bit())
+                { // 64-bit
+                    Console.WriteLine("Runtime detected 64-bit machine"); //logdis
+                    hearthstoneRegistryPath = @"SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\Hearthstone";
+                }
+                else
+                { // 32-bit
+                    Console.WriteLine("Runtime detected non-64-bit machine. Assuming 32-bit machine"); //logdis
+                    hearthstoneRegistryPath = @"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Hearthstone";
+                }
+
+                Console.WriteLine("Using registry path: " + hearthstoneRegistryPath); //logdis
+                hearthstoneInstallPath = getHearthstoneInstallPath(hearthstoneRegistryPath);
+                if (hearthstoneInstallPath == null || hearthstoneInstallPath == "")
+                {
+                    Console.WriteLine("Unable to locate Hearthstone install path using registries"); //logdis
+                    hearthstoneInstallPathErrorLabel.Text = "Unable to auto-detect Hearthstone install path. Browse to path below.";
+                    tabControl.SelectTab(settingsTabPage);
+                    Show();
+                } else
+                {
+                    Properties.Settings.Default.hearthstoneInstallPath = hearthstoneInstallPath;
+                    Properties.Settings.Default.Save();
+                }
+            }
+
+            logPath = hearthstoneInstallPath + @"\Logs";
+            String logFileName = logPath + @"\Power.log";
+
+            assertLogFile(logFileName, logPath);
+
             tabControl.DrawItem += new DrawItemEventHandler(tabControl_DrawItem);
             durationBar.ValueChanged +=  new System.EventHandler(durationBar_ValueChanged);
             notificationBackgroundColorPanel.Click += new System.EventHandler(notificationBackgroundColorPanel_Clicked);
@@ -65,7 +114,7 @@ namespace CasualStone
                 Properties.Settings.Default.Usernames
                 );
             sasquatch.getRolling();
-
+            Hide();
         }
 
         // Initialize all the preference settings from properties default settings
@@ -86,6 +135,8 @@ namespace CasualStone
             notificationBackgroundColorPanel.BackColor = Properties.Settings.Default.notifBgColor;
             notificationTextColorPanel.BackColor = Properties.Settings.Default.notifTextColor;
 
+            hearthstoneInstallPathTextBox.Text = Properties.Settings.Default.hearthstoneInstallPath;
+
             // Set default check boxes on menu strip of the events captured from HS logs
             if      (Properties.Settings.Default.GAME_START == "Show for Player"  ) { showForPlayerToolStripMenuItem.Checked = true; }
             else if (Properties.Settings.Default.GAME_START == "Show for Opponent") { showForOpponentToolStripMenuItem.Checked = true; }
@@ -104,7 +155,7 @@ namespace CasualStone
 
 
 
-            if (durationBar.Value == 0) this.durationLabel.Text = "Click to close";
+            if (durationBar.Value == 0) this.durationLabel.Text = "Forever ever";
             else if (durationBar.Value == 1) this.durationLabel.Text = durationBar.Value.ToString() + " second";
             else this.durationLabel.Text = durationBar.Value.ToString() + " seconds";
 
@@ -124,12 +175,23 @@ namespace CasualStone
             Properties.Settings.Default.notifBgColor = notificationBackgroundColorPanel.BackColor;
             Properties.Settings.Default.notifTextColor = notificationTextColorPanel.BackColor;
 
+            if (hearthstoneInstallPathTextBox.Text != Properties.Settings.Default.hearthstoneInstallPath)
+            {
+
+                String logPath = hearthstoneInstallPathTextBox.Text + @"\Logs";
+                String logFileName = logPath + @"\Power.log";
+
+                assertLogFile(logFileName, logPath);
+                Properties.Settings.Default.hearthstoneInstallPath = hearthstoneInstallPathTextBox.Text;
+            }
+
             StringCollection temp = new StringCollection();
             foreach (string username in usernameListBox.Items) { temp.Add(username.Trim()); }
 
             Properties.Settings.Default.Usernames = temp;
 
             this.sasquatch.updatePreferences(
+                Properties.Settings.Default.hearthstoneInstallPath,
                 Properties.Settings.Default.hideNotifEnabled,
                 Properties.Settings.Default.closeAllEnabled,
                 Properties.Settings.Default.showHSEnabled,
@@ -144,6 +206,153 @@ namespace CasualStone
                 );
 
             Properties.Settings.Default.Save();
+        }
+
+
+
+        private void checkLogFile(String withName, String atPath)
+        {
+            // Create the logs folder if it ain't there
+            if (!Directory.Exists(atPath))
+            {
+                try
+                {
+                    Directory.CreateDirectory(atPath);
+                    Console.WriteLine("Successfully created log folder");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Unable to create log folder");
+                    Console.WriteLine(ex.ToString()); //logdis
+                }
+            }
+
+            if (File.Exists(withName))
+            {
+                Console.WriteLine("Log file found"); //logdis
+            }
+            else // If the log file doesnt exist, create it
+            {
+                try
+                {
+                    File.Create(withName).Dispose();
+                    if (processRunning("Hearthstone"))
+                    {
+                        MessageBox.Show("Hearthstone must be restarted in order to receive notifications.");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Unable to create log file");
+                    Console.WriteLine(ex.ToString()); //logdis
+                }
+                Console.WriteLine("Successfully created log file:" + withName); //logdis
+            }
+        }
+
+        private bool processRunning(string procName)
+        {
+            return System.Diagnostics.Process.GetProcessesByName(procName).Length > 0;
+        }
+
+        private void assertLogFile(String withLogName, String usingPath)
+        {
+            String logConfFileName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), @"Blizzard\Hearthstone\log.config");
+
+            Console.WriteLine("Checking for log configuration file: " + logConfFileName); //logdis
+            checkLogConfFile(logConfFileName);
+            Console.WriteLine("Checking for log file: " + withLogName); //logdis
+            checkLogFile(withLogName, usingPath);
+        }
+
+        private bool userRunning64Bit()
+        {
+            return IntPtr.Size == 8;
+        }
+
+        // Look for the logfile directory in the Hearthstone directory.
+        // If the Hearthstone install path is not found, assume that the executable was copied 
+        private String getHearthstoneInstallPath(string registryPath)
+        {
+            try
+            {
+                using (RegistryKey key = Registry.LocalMachine.OpenSubKey(registryPath))
+                {
+                    if (key != null)
+                    {
+                        Object o = key.GetValue("InstallLocation");
+                        if (o != null)
+                        {
+                            Console.WriteLine(o as String);
+
+                            return o as String;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)  //just for demonstration...it's always best to handle specific exceptions
+            {
+                Console.WriteLine("Unable to locate path for Hearthstone"); //logdis
+                Console.WriteLine(ex.ToString()); //logdis
+            }
+            return null;
+        }
+
+        private void checkLogConfFile(String withName)
+        {
+            if (File.Exists(withName))
+            {
+                Console.WriteLine("Log configuration file found"); //logdis
+
+                // Check to see if the conf file we found actually contains required settings
+                if (File.ReadAllText(withName).Contains(@"[Power]"))
+                {
+
+                    Console.WriteLine("Log configuration file contains required [Power] settings"); //logdis
+                }
+                else
+                {
+                    try
+                    {
+                        using (System.IO.StreamWriter file = new System.IO.StreamWriter(withName))
+                        {
+                            file.WriteLine("[Power]");
+                            file.WriteLine("FilePrinting=true");
+                            file.WriteLine("ConsolePrinting=true");
+                            file.WriteLine("ScreenPrinting=false");
+
+                        }
+                        Console.WriteLine("Successfully wrote to log configuration");
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine("Unable to write to log configuration");
+                        Console.WriteLine(ex.ToString()); //logdis
+                    }
+                }
+            }
+            else //If the conf file doesn't exist, create it with the required settings.
+            {
+                Console.WriteLine("Log configuration file is missing"); //logdis
+
+                try
+                {
+                    using (System.IO.StreamWriter file = new System.IO.StreamWriter(withName))
+                    {
+                        file.WriteLine("[Power]");
+                        file.WriteLine("FilePrinting=true");
+                        file.WriteLine("ConsolePrinting=true");
+                        file.WriteLine("ScreenPrinting=false");
+                    }
+                    Console.WriteLine("Successfully created log configuration");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Unable to create log configuration file: " + withName);
+                    Console.WriteLine(ex.ToString()); //logdis
+                }
+
+            }
         }
 
         private void tabControl_DrawItem(Object sender, System.Windows.Forms.DrawItemEventArgs e)
@@ -198,7 +407,7 @@ namespace CasualStone
 
         protected override void OnLoad(EventArgs e)
         {
-            ShowInTaskbar = false; // Remove from taskbar.
+            ShowInTaskbar = true; // Remove from taskbar.
             //Visible = false; // Hide form window.
 
             base.OnLoad(e);
@@ -257,6 +466,7 @@ namespace CasualStone
             else { Console.WriteLine(eventName + " is not one of the events that we use."); /*//logdis*/ }
             Properties.Settings.Default.Save();
             this.sasquatch.updatePreferences(
+                Properties.Settings.Default.hearthstoneInstallPath,
                 Properties.Settings.Default.hideNotifEnabled,
                 Properties.Settings.Default.closeAllEnabled,
                 Properties.Settings.Default.showHSEnabled,
@@ -458,6 +668,7 @@ namespace CasualStone
         {
             usernameErrorLabel.Text = "";
             preferenceErrorLabel.Text = "";
+            hearthstoneInstallPathErrorLabel.Text = "";
             if ((sender as TabControl).SelectedTab.Text == "Updates")
             {
                 tenenbaum.DownloadStringAsync(new System.Uri("https://raw.githubusercontent.com/skonagaya/CasualStonePC/master/CasualStone/Properties/AssemblyInfo.cs"));
@@ -584,6 +795,26 @@ namespace CasualStone
         {
 
             radioClickMenuItem((ToolStripMenuItem)sender);
+        }
+
+        private void label1_Click_1(object sender, EventArgs e)
+        {
+        }
+
+        private void hearthstoneInstallPathDialog_HelpRequest(object sender, EventArgs e)
+        {
+
+        }
+
+        private void browseInstallPathButton_Click(object sender, EventArgs e)
+        {
+            DialogResult result = hearthstoneInstallPathDialog.ShowDialog();
+
+            if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(hearthstoneInstallPathDialog.SelectedPath))
+            {
+                hearthstoneInstallPathTextBox.Text = hearthstoneInstallPathDialog.SelectedPath;
+
+            }
         }
     }
 }

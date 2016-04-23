@@ -26,197 +26,16 @@ namespace CasualStone
         [STAThread]
         static void Main()
         {
-            // initialize username list
-            if (Properties.Settings.Default.Usernames == null)
-            {
-                Properties.Settings.Default.Usernames = new System.Collections.Specialized.StringCollection();
-                Properties.Settings.Default.Save();
-            }
 
-            var toastNotification1 = new Notification("", "", 0, Properties.Settings.Default.closeAllEnabled, Properties.Settings.Default.showHSEnabled, Properties.Settings.Default.notifBgColor, Properties.Settings.Default.notifTextColor);
+            //var toastNotification1 = new Notification("", "", 0, Properties.Settings.Default.closeAllEnabled, Properties.Settings.Default.showHSEnabled, Properties.Settings.Default.notifBgColor, Properties.Settings.Default.notifTextColor);
 
-            string hearthstoneRegistryPath;
-            if (userRunning64Bit())
-            { // 64-bit
-                Console.WriteLine("Runtime detected 64-bit machine"); //logdis
-                hearthstoneRegistryPath = @"SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\Hearthstone";
-            } else
-            { // 32-bit
-                Console.WriteLine("Runtime detected non-64-bit machine. Assuming 32-bit machine"); //logdis
-                hearthstoneRegistryPath = @"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Hearthstone";
-            }
-            Console.WriteLine("Using registry path: "+ hearthstoneRegistryPath);
-
-            
-            String hearthStoneInstallPath = getHearthstoneInstallPath(hearthstoneRegistryPath);
-            if (hearthStoneInstallPath == null || hearthStoneInstallPath == "")
-            {
-                Console.WriteLine("Unable to locate Hearthstone install path using registries"); //logdis
-                MessageBox.Show("Couldn't locate Hearthstone install path! Oh no!");
-                Application.Exit();
-            }
-            String logPath = hearthStoneInstallPath + @"\Logs";
-            String logFileName = logPath + @"\Power.log";
-
-            assertLogFile(logFileName, logPath);
 
 
             Application.EnableVisualStyles();
             //Application.SetCompatibleTextRenderingDefault(true);
-            Application.Run(new CasualStoneForm(logFileName));
+            Application.Run(new CasualStoneForm());
         }
         
-
-        static void checkLogFile(String withName, String atPath)
-        {
-            // Create the logs folder if it ain't there
-            if (!Directory.Exists(atPath))
-            {
-                try
-                {
-                    Directory.CreateDirectory(atPath);
-                    Console.WriteLine("Successfully created log folder");
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine("Unable to create log folder");
-                    Console.WriteLine(ex.ToString()); //logdis
-                }
-            }
-
-            if (File.Exists(withName))
-            {
-                Console.WriteLine("Log file found"); //logdis
-            }
-            else // If the log file doesnt exist, create it
-            {
-                try
-                {
-                    File.Create(withName).Dispose();
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine("Unable to create log file");
-                    Console.WriteLine(ex.ToString()); //logdis
-                }
-                Console.WriteLine("Successfully created log file:" + withName); //logdis
-            }
-        }
-
-        static bool processRunning(string procName)
-        {
-            return System.Diagnostics.Process.GetProcessesByName(procName).Length > 0;
-        }
-
-        static void assertLogFile(String withLogName, String usingPath)
-        {
-            String logConfFileName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), @"Blizzard\Hearthstone\log.config");
-
-            Console.WriteLine("Checking for log configuration file: " + logConfFileName); //logdis
-            checkLogConfFile(logConfFileName);
-            Console.WriteLine("Checking for log file: " + withLogName); //logdis
-            checkLogFile(withLogName, usingPath);
-        }
-
-        static bool userRunning64Bit()
-        {
-            return IntPtr.Size == 8;
-        }
-
-        // Look for the logfile directory in the Hearthstone directory.
-        // If the Hearthstone install path is not found, assume that the executable was copied 
-        static String getHearthstoneInstallPath(string registryPath)
-        {
-            try
-            {
-                using (RegistryKey key = Registry.LocalMachine.OpenSubKey(registryPath))
-                {
-                    if (key != null)
-                    {
-                        Object o = key.GetValue("InstallLocation");
-                        if (o != null)
-                        {
-                            Console.WriteLine(o as String);
-
-                            return o as String;
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)  //just for demonstration...it's always best to handle specific exceptions
-            {
-                Console.WriteLine("Unable to locate path for Hearthstone"); //logdis
-                Console.WriteLine(ex.ToString()); //logdis
-            }
-            return null;
-        }
-
-        static void checkLogConfFile(String withName)
-        {
-            if (File.Exists(withName))
-            {
-                Console.WriteLine("Log configuration file found"); //logdis
-
-                // Check to see if the conf file we found actually contains required settings
-                if (File.ReadAllText(withName).Contains(@"[Power]"))
-                {
-
-                    Console.WriteLine("Log configuration file contains required [Power] settings"); //logdis
-                }
-                else
-                {
-                    try
-                    {
-                        using (System.IO.StreamWriter file = new System.IO.StreamWriter(withName))
-                        {
-                            file.WriteLine("[Power]");
-                            file.WriteLine("FilePrinting=true");
-                            file.WriteLine("ConsolePrinting=true");
-                            file.WriteLine("ScreenPrinting=false");
-
-                        }
-                        Console.WriteLine("Successfully wrote to log configuration");
-                        if (processRunning("Hearthstone"))
-                        {
-                            MessageBox.Show("Hearthstone must be restarted in order to receive notifications.");
-                            Application.Exit();
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine("Unable to write to log configuration");
-                        Console.WriteLine(ex.ToString()); //logdis
-                    }
-                }
-            }
-            else //If the conf file doesn't exist, create it with the required settings.
-            {
-                Console.WriteLine("Log configuration file is missing"); //logdis
-
-                try
-                {
-                    using (System.IO.StreamWriter file = new System.IO.StreamWriter(withName))
-                    {
-                        file.WriteLine("[Power]");
-                        file.WriteLine("FilePrinting=true");
-                        file.WriteLine("ConsolePrinting=true");
-                        file.WriteLine("ScreenPrinting=false");
-                    }
-                    Console.WriteLine("Successfully created log configuration");
-                    if (processRunning("Hearthstone"))
-                    {
-                        MessageBox.Show("Hearthstone must be restarted in order to receive notifications.");
-                        Application.Exit();
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine("Unable to create log configuration file: " + withName);
-                    Console.WriteLine(ex.ToString()); //logdis
-                }
-
-            }
-        }
     }
 }
 
@@ -301,6 +120,7 @@ public class HearthLogReader
     }
 
     public void updatePreferences(
+        string logFileName,
         bool hideNotifEnabled, 
         bool closeAllNotifEnabled, 
         bool showHSEnabled, 
@@ -314,6 +134,7 @@ public class HearthLogReader
         StringCollection usernames
         )
     {
+        this.logFileName = logFileName;
         this.hideNotifEnabled = hideNotifEnabled;
         this.closeAllNotifEnabled = closeAllNotifEnabled;
         this.showHSEnabled = showHSEnabled;

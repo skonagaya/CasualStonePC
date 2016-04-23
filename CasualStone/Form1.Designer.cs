@@ -74,6 +74,11 @@
             this.usernameTextBox = new System.Windows.Forms.TextBox();
             this.usernameListBox = new System.Windows.Forms.ListBox();
             this.accountLabel = new System.Windows.Forms.Label();
+            this.settingsTabPage = new System.Windows.Forms.TabPage();
+            this.hearthstoneInstallPathErrorLabel = new System.Windows.Forms.Label();
+            this.browseInstallPathButton = new System.Windows.Forms.Button();
+            this.hearthstoneInstallPathTextBox = new System.Windows.Forms.TextBox();
+            this.hearthstoneInstallPathLabel = new System.Windows.Forms.Label();
             this.updatesTabPage = new System.Windows.Forms.TabPage();
             this.updateLinkLabel = new System.Windows.Forms.LinkLabel();
             this.updateLabel = new System.Windows.Forms.Label();
@@ -88,11 +93,13 @@
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.colorDialog = new System.Windows.Forms.ColorDialog();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.hearthstoneInstallPathDialog = new System.Windows.Forms.FolderBrowserDialog();
             this.mainMenuStrip.SuspendLayout();
             this.tabControl.SuspendLayout();
             this.preferenceTabPage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.durationBar)).BeginInit();
             this.accountTabPage.SuspendLayout();
+            this.settingsTabPage.SuspendLayout();
             this.updatesTabPage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.updatePictureBox)).BeginInit();
             this.aboutTabPage.SuspendLayout();
@@ -275,6 +282,7 @@
             this.tabControl.Alignment = System.Windows.Forms.TabAlignment.Left;
             this.tabControl.Controls.Add(this.preferenceTabPage);
             this.tabControl.Controls.Add(this.accountTabPage);
+            this.tabControl.Controls.Add(this.settingsTabPage);
             this.tabControl.Controls.Add(this.updatesTabPage);
             this.tabControl.Controls.Add(this.aboutTabPage);
             this.tabControl.DrawMode = System.Windows.Forms.TabDrawMode.OwnerDrawFixed;
@@ -313,11 +321,10 @@
             // 
             // preferenceErrorLabel
             // 
-            this.preferenceErrorLabel.AutoSize = true;
             this.preferenceErrorLabel.ForeColor = System.Drawing.Color.Red;
             this.preferenceErrorLabel.Location = new System.Drawing.Point(16, 136);
             this.preferenceErrorLabel.Name = "preferenceErrorLabel";
-            this.preferenceErrorLabel.Size = new System.Drawing.Size(0, 20);
+            this.preferenceErrorLabel.Size = new System.Drawing.Size(500, 20);
             this.preferenceErrorLabel.TabIndex = 16;
             // 
             // previewButton
@@ -332,10 +339,9 @@
             // 
             // notificationTextColorLabel
             // 
-            this.notificationTextColorLabel.AutoSize = true;
             this.notificationTextColorLabel.Location = new System.Drawing.Point(16, 250);
             this.notificationTextColorLabel.Name = "notificationTextColorLabel";
-            this.notificationTextColorLabel.Size = new System.Drawing.Size(207, 20);
+            this.notificationTextColorLabel.Size = new System.Drawing.Size(550, 20);
             this.notificationTextColorLabel.TabIndex = 14;
             this.notificationTextColorLabel.Text = "Select notification text color:";
             // 
@@ -349,10 +355,9 @@
             // 
             // notifBackgroundColorLabel
             // 
-            this.notifBackgroundColorLabel.AutoSize = true;
             this.notifBackgroundColorLabel.Location = new System.Drawing.Point(16, 167);
             this.notifBackgroundColorLabel.Name = "notifBackgroundColorLabel";
-            this.notifBackgroundColorLabel.Size = new System.Drawing.Size(265, 20);
+            this.notifBackgroundColorLabel.Size = new System.Drawing.Size(550, 20);
             this.notifBackgroundColorLabel.TabIndex = 12;
             this.notifBackgroundColorLabel.Text = "Select notification background color:";
             // 
@@ -367,10 +372,9 @@
             // 
             // autoFocusCheckBox
             // 
-            this.autoFocusCheckBox.AutoSize = true;
             this.autoFocusCheckBox.Location = new System.Drawing.Point(20, 100);
             this.autoFocusCheckBox.Name = "autoFocusCheckBox";
-            this.autoFocusCheckBox.Size = new System.Drawing.Size(408, 24);
+            this.autoFocusCheckBox.Size = new System.Drawing.Size(550, 24);
             this.autoFocusCheckBox.TabIndex = 10;
             this.autoFocusCheckBox.Text = "Bring Hearthstone to the top when player turn begins";
             this.autoFocusCheckBox.UseVisualStyleBackColor = true;
@@ -378,10 +382,9 @@
             // 
             // durationLabel
             // 
-            this.durationLabel.AutoSize = true;
             this.durationLabel.Location = new System.Drawing.Point(380, 378);
             this.durationLabel.Name = "durationLabel";
-            this.durationLabel.Size = new System.Drawing.Size(53, 20);
+            this.durationLabel.Size = new System.Drawing.Size(150, 20);
             this.durationLabel.TabIndex = 9;
             this.durationLabel.Text = "           ";
             this.durationLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -389,10 +392,9 @@
             // 
             // durationDescriptionLabel
             // 
-            this.durationDescriptionLabel.AutoSize = true;
             this.durationDescriptionLabel.Location = new System.Drawing.Point(16, 324);
             this.durationDescriptionLabel.Name = "durationDescriptionLabel";
-            this.durationDescriptionLabel.Size = new System.Drawing.Size(306, 20);
+            this.durationDescriptionLabel.Size = new System.Drawing.Size(550, 20);
             this.durationDescriptionLabel.TabIndex = 5;
             this.durationDescriptionLabel.Text = "Select duration notifications will stay open:";
             this.durationDescriptionLabel.Click += new System.EventHandler(this.durationDescriptionLabel_Click);
@@ -408,12 +410,11 @@
             // 
             // closeAllNotifCheckBox
             // 
-            this.closeAllNotifCheckBox.AutoSize = true;
             this.closeAllNotifCheckBox.Checked = true;
             this.closeAllNotifCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
             this.closeAllNotifCheckBox.Location = new System.Drawing.Point(20, 40);
             this.closeAllNotifCheckBox.Name = "closeAllNotifCheckBox";
-            this.closeAllNotifCheckBox.Size = new System.Drawing.Size(423, 24);
+            this.closeAllNotifCheckBox.Size = new System.Drawing.Size(550, 24);
             this.closeAllNotifCheckBox.TabIndex = 2;
             this.closeAllNotifCheckBox.Text = "Close all notification when a single notification is clicked";
             this.closeAllNotifCheckBox.UseVisualStyleBackColor = true;
@@ -421,12 +422,11 @@
             // 
             // showHSCheckBox
             // 
-            this.showHSCheckBox.AutoSize = true;
             this.showHSCheckBox.Checked = true;
             this.showHSCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
             this.showHSCheckBox.Location = new System.Drawing.Point(20, 70);
             this.showHSCheckBox.Name = "showHSCheckBox";
-            this.showHSCheckBox.Size = new System.Drawing.Size(440, 24);
+            this.showHSCheckBox.Size = new System.Drawing.Size(550, 24);
             this.showHSCheckBox.TabIndex = 1;
             this.showHSCheckBox.Text = "Bring Hearthstone to the top when a notification is clicked";
             this.showHSCheckBox.UseVisualStyleBackColor = true;
@@ -434,10 +434,9 @@
             // 
             // hideNotifCheckBox
             // 
-            this.hideNotifCheckBox.AutoSize = true;
             this.hideNotifCheckBox.Location = new System.Drawing.Point(20, 10);
             this.hideNotifCheckBox.Name = "hideNotifCheckBox";
-            this.hideNotifCheckBox.Size = new System.Drawing.Size(446, 24);
+            this.hideNotifCheckBox.Size = new System.Drawing.Size(550, 24);
             this.hideNotifCheckBox.TabIndex = 0;
             this.hideNotifCheckBox.Text = "Do not show notifications if Hearthstone already has focus";
             this.hideNotifCheckBox.UseVisualStyleBackColor = true;
@@ -483,11 +482,10 @@
             // 
             // usernameErrorLabel
             // 
-            this.usernameErrorLabel.AutoSize = true;
             this.usernameErrorLabel.ForeColor = System.Drawing.Color.Red;
             this.usernameErrorLabel.Location = new System.Drawing.Point(32, 195);
             this.usernameErrorLabel.Name = "usernameErrorLabel";
-            this.usernameErrorLabel.Size = new System.Drawing.Size(0, 20);
+            this.usernameErrorLabel.Size = new System.Drawing.Size(500, 20);
             this.usernameErrorLabel.TabIndex = 4;
             // 
             // addUsernameButton
@@ -518,15 +516,65 @@
             // 
             // accountLabel
             // 
-            this.accountLabel.AutoSize = true;
             this.accountLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.accountLabel.Location = new System.Drawing.Point(32, 35);
             this.accountLabel.MaximumSize = new System.Drawing.Size(500, 0);
             this.accountLabel.Name = "accountLabel";
-            this.accountLabel.Size = new System.Drawing.Size(492, 160);
+            this.accountLabel.Size = new System.Drawing.Size(500, 175);
             this.accountLabel.TabIndex = 0;
             this.accountLabel.Text = resources.GetString("accountLabel.Text");
             this.accountLabel.Click += new System.EventHandler(this.accountLabel_Click);
+            // 
+            // settingsTabPage
+            // 
+            this.settingsTabPage.Controls.Add(this.hearthstoneInstallPathErrorLabel);
+            this.settingsTabPage.Controls.Add(this.browseInstallPathButton);
+            this.settingsTabPage.Controls.Add(this.hearthstoneInstallPathTextBox);
+            this.settingsTabPage.Controls.Add(this.hearthstoneInstallPathLabel);
+            this.settingsTabPage.Location = new System.Drawing.Point(104, 4);
+            this.settingsTabPage.Name = "settingsTabPage";
+            this.settingsTabPage.Size = new System.Drawing.Size(595, 489);
+            this.settingsTabPage.TabIndex = 4;
+            this.settingsTabPage.Text = "Settings";
+            this.settingsTabPage.UseVisualStyleBackColor = true;
+            // 
+            // hearthstoneInstallPathErrorLabel
+            // 
+            this.hearthstoneInstallPathErrorLabel.ForeColor = System.Drawing.Color.Red;
+            this.hearthstoneInstallPathErrorLabel.Location = new System.Drawing.Point(27, 123);
+            this.hearthstoneInstallPathErrorLabel.Name = "hearthstoneInstallPathErrorLabel";
+            this.hearthstoneInstallPathErrorLabel.Size = new System.Drawing.Size(500, 20);
+            this.hearthstoneInstallPathErrorLabel.TabIndex = 3;
+            // 
+            // browseInstallPathButton
+            // 
+            this.browseInstallPathButton.Location = new System.Drawing.Point(445, 152);
+            this.browseInstallPathButton.Name = "browseInstallPathButton";
+            this.browseInstallPathButton.Size = new System.Drawing.Size(95, 31);
+            this.browseInstallPathButton.TabIndex = 2;
+            this.browseInstallPathButton.Text = "Browse...";
+            this.browseInstallPathButton.UseVisualStyleBackColor = true;
+            this.browseInstallPathButton.Click += new System.EventHandler(this.browseInstallPathButton_Click);
+            // 
+            // hearthstoneInstallPathTextBox
+            // 
+            this.hearthstoneInstallPathTextBox.Enabled = false;
+            this.hearthstoneInstallPathTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.hearthstoneInstallPathTextBox.Location = new System.Drawing.Point(32, 153);
+            this.hearthstoneInstallPathTextBox.Name = "hearthstoneInstallPathTextBox";
+            this.hearthstoneInstallPathTextBox.Size = new System.Drawing.Size(407, 26);
+            this.hearthstoneInstallPathTextBox.TabIndex = 1;
+            // 
+            // hearthstoneInstallPathLabel
+            // 
+            this.hearthstoneInstallPathLabel.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.hearthstoneInstallPathLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.hearthstoneInstallPathLabel.Location = new System.Drawing.Point(28, 99);
+            this.hearthstoneInstallPathLabel.Name = "hearthstoneInstallPathLabel";
+            this.hearthstoneInstallPathLabel.Size = new System.Drawing.Size(500, 20);
+            this.hearthstoneInstallPathLabel.TabIndex = 0;
+            this.hearthstoneInstallPathLabel.Text = "Install Path for HearthStone:";
+            this.hearthstoneInstallPathLabel.Click += new System.EventHandler(this.label1_Click_1);
             // 
             // updatesTabPage
             // 
@@ -553,17 +601,16 @@
             // 
             // updateLabel
             // 
-            this.updateLabel.AutoSize = true;
             this.updateLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.updateLabel.Location = new System.Drawing.Point(166, 191);
             this.updateLabel.Name = "updateLabel";
-            this.updateLabel.Size = new System.Drawing.Size(172, 20);
+            this.updateLabel.Size = new System.Drawing.Size(400, 20);
             this.updateLabel.TabIndex = 1;
             this.updateLabel.Text = "Checking for updates...";
             // 
             // updatePictureBox
             // 
-            this.updatePictureBox.Image = global::CasualStone.Properties.Resources._284;
+            this.updatePictureBox.Image = global::CasualStone.Properties.Resources.loading;
             this.updatePictureBox.Location = new System.Drawing.Point(19, 171);
             this.updatePictureBox.Name = "updatePictureBox";
             this.updatePictureBox.Size = new System.Drawing.Size(124, 124);
@@ -586,22 +633,20 @@
             // 
             // versionLabel
             // 
-            this.versionLabel.AutoSize = true;
             this.versionLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F);
             this.versionLabel.Location = new System.Drawing.Point(163, 235);
             this.versionLabel.Name = "versionLabel";
-            this.versionLabel.Size = new System.Drawing.Size(323, 51);
+            this.versionLabel.Size = new System.Drawing.Size(400, 100);
             this.versionLabel.TabIndex = 5;
             this.versionLabel.Text = "Copyright © Sean Konagaya. All Rights Reserved.\r\n\r\nVersion 0.0.1 | KONAGAYA.IO";
             this.versionLabel.Click += new System.EventHandler(this.versionLabel_Click_1);
             // 
             // casualStoneLabel
             // 
-            this.casualStoneLabel.AutoSize = true;
             this.casualStoneLabel.Font = new System.Drawing.Font("Calibri", 20F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.casualStoneLabel.Location = new System.Drawing.Point(157, 158);
             this.casualStoneLabel.Name = "casualStoneLabel";
-            this.casualStoneLabel.Size = new System.Drawing.Size(235, 49);
+            this.casualStoneLabel.Size = new System.Drawing.Size(400, 49);
             this.casualStoneLabel.TabIndex = 4;
             this.casualStoneLabel.Text = "Casual Stone";
             // 
@@ -652,16 +697,20 @@
             this.contextMenuStrip1.Name = "contextMenuStrip1";
             this.contextMenuStrip1.Size = new System.Drawing.Size(74, 4);
             // 
+            // hearthstoneInstallPathDialog
+            // 
+            this.hearthstoneInstallPathDialog.HelpRequest += new System.EventHandler(this.hearthstoneInstallPathDialog_HelpRequest);
+            // 
             // CasualStoneForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(727, 567);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
+            this.ClientSize = new System.Drawing.Size(728, 572);
             this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.tabControl);
             this.Controls.Add(this.okButton);
             this.Controls.Add(this.applyButton);
             this.Margin = new System.Windows.Forms.Padding(2);
+            this.MinimumSize = new System.Drawing.Size(500, 56);
             this.Name = "CasualStoneForm";
             this.Text = "Preferences";
             this.Load += new System.EventHandler(this.CasualStoneForm_Load);
@@ -672,11 +721,12 @@
             ((System.ComponentModel.ISupportInitialize)(this.durationBar)).EndInit();
             this.accountTabPage.ResumeLayout(false);
             this.accountTabPage.PerformLayout();
+            this.settingsTabPage.ResumeLayout(false);
+            this.settingsTabPage.PerformLayout();
             this.updatesTabPage.ResumeLayout(false);
             this.updatesTabPage.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.updatePictureBox)).EndInit();
             this.aboutTabPage.ResumeLayout(false);
-            this.aboutTabPage.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
 
@@ -741,6 +791,12 @@
         private System.Windows.Forms.Label updateLabel;
         private System.Windows.Forms.LinkLabel updateLinkLabel;
         private System.Windows.Forms.Label preferenceErrorLabel;
+        private System.Windows.Forms.TabPage settingsTabPage;
+        private System.Windows.Forms.Label hearthstoneInstallPathLabel;
+        private System.Windows.Forms.FolderBrowserDialog hearthstoneInstallPathDialog;
+        private System.Windows.Forms.TextBox hearthstoneInstallPathTextBox;
+        private System.Windows.Forms.Button browseInstallPathButton;
+        private System.Windows.Forms.Label hearthstoneInstallPathErrorLabel;
     }
 }
 
