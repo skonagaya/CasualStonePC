@@ -35,7 +35,26 @@ namespace CasualStone
 
             var toastNotification1 = new Notification("", "", 0, Properties.Settings.Default.closeAllEnabled, Properties.Settings.Default.showHSEnabled, Properties.Settings.Default.notifBgColor, Properties.Settings.Default.notifTextColor);
 
-            String hearthStoneInstallPath = getHearthstoneInstallPath();
+            string hearthstoneRegistryPath;
+            if (userRunning64Bit())
+            { // 64-bit
+                Console.WriteLine("Runtime detected 64-bit machine"); //logdis
+                hearthstoneRegistryPath = @"SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\Hearthstone";
+            } else
+            { // 32-bit
+                Console.WriteLine("Runtime detected non-64-bit machine. Assuming 32-bit machine"); //logdis
+                hearthstoneRegistryPath = @"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Hearthstone";
+            }
+            Console.WriteLine("Using registry path: "+ hearthstoneRegistryPath);
+
+            
+            String hearthStoneInstallPath = getHearthstoneInstallPath(hearthstoneRegistryPath);
+            if (hearthStoneInstallPath == null || hearthStoneInstallPath == "")
+            {
+                Console.WriteLine("Unable to locate Hearthstone install path using registries"); //logdis
+                MessageBox.Show("Couldn't locate Hearthstone install path! Oh no!");
+                Application.Exit();
+            }
             String logPath = hearthStoneInstallPath + @"\Logs";
             String logFileName = logPath + @"\Power.log";
 
@@ -84,6 +103,11 @@ namespace CasualStone
             }
         }
 
+        static bool processRunning(string procName)
+        {
+            return System.Diagnostics.Process.GetProcessesByName(procName).Length > 0;
+        }
+
         static void assertLogFile(String withLogName, String usingPath)
         {
             String logConfFileName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), @"Blizzard\Hearthstone\log.config");
@@ -94,15 +118,18 @@ namespace CasualStone
             checkLogFile(withLogName, usingPath);
         }
 
-
+        static bool userRunning64Bit()
+        {
+            return IntPtr.Size == 8;
+        }
 
         // Look for the logfile directory in the Hearthstone directory.
         // If the Hearthstone install path is not found, assume that the executable was copied 
-        static String getHearthstoneInstallPath()
+        static String getHearthstoneInstallPath(string registryPath)
         {
             try
             {
-                using (RegistryKey key = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Hearthstone"))
+                using (RegistryKey key = Registry.LocalMachine.OpenSubKey(registryPath))
                 {
                     if (key != null)
                     {
@@ -146,8 +173,14 @@ namespace CasualStone
                             file.WriteLine("FilePrinting=true");
                             file.WriteLine("ConsolePrinting=true");
                             file.WriteLine("ScreenPrinting=false");
+
                         }
                         Console.WriteLine("Successfully wrote to log configuration");
+                        if (processRunning("Hearthstone"))
+                        {
+                            MessageBox.Show("Hearthstone must be restarted in order to receive notifications.");
+                            Application.Exit();
+                        }
                     }
                     catch (Exception ex)
                     {
@@ -170,6 +203,11 @@ namespace CasualStone
                         file.WriteLine("ScreenPrinting=false");
                     }
                     Console.WriteLine("Successfully created log configuration");
+                    if (processRunning("Hearthstone"))
+                    {
+                        MessageBox.Show("Hearthstone must be restarted in order to receive notifications.");
+                        Application.Exit();
+                    }
                 }
                 catch (Exception ex)
                 {
