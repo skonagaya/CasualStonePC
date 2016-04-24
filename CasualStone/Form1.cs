@@ -34,7 +34,6 @@ namespace CasualStone
                 Properties.Settings.Default.Usernames = new System.Collections.Specialized.StringCollection();
                 Properties.Settings.Default.Save();
             }
-
             string logPath;
             string hearthstoneInstallPath;
             if (Properties.Settings.Default.hearthstoneInstallPath != "" &&
@@ -191,7 +190,7 @@ namespace CasualStone
             Properties.Settings.Default.Usernames = temp;
 
             this.sasquatch.updatePreferences(
-                Properties.Settings.Default.hearthstoneInstallPath,
+                Properties.Settings.Default.hearthstoneInstallPath+@"\Logs\Power.log",
                 Properties.Settings.Default.hideNotifEnabled,
                 Properties.Settings.Default.closeAllEnabled,
                 Properties.Settings.Default.showHSEnabled,
@@ -466,7 +465,7 @@ namespace CasualStone
             else { Console.WriteLine(eventName + " is not one of the events that we use."); /*//logdis*/ }
             Properties.Settings.Default.Save();
             this.sasquatch.updatePreferences(
-                Properties.Settings.Default.hearthstoneInstallPath,
+                Properties.Settings.Default.hearthstoneInstallPath + @"\Logs\Power.log",
                 Properties.Settings.Default.hideNotifEnabled,
                 Properties.Settings.Default.closeAllEnabled,
                 Properties.Settings.Default.showHSEnabled,

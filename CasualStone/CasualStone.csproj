@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{967459CD-4281-4778-8131-6AA873216CEC}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>CasualStone</RootNamespace>
     <AssemblyName>CasualStone</AssemblyName>
@@ -27,8 +27,8 @@
     <ProductName>CasualStone</ProductName>
     <PublisherName>CasualStone</PublisherName>
     <SuiteName>CasualStone</SuiteName>
-    <ApplicationRevision>2</ApplicationRevision>
-    <ApplicationVersion>0.1.1.%2a</ApplicationVersion>
+    <ApplicationRevision>1</ApplicationRevision>
+    <ApplicationVersion>0.2.1.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
     <PublishWizardCompleted>true</PublishWizardCompleted>
