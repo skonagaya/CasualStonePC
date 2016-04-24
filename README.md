@@ -10,7 +10,7 @@ Here's a quick [demo](https://gfycat.com/NarrowUnlawfulCygnet) of Casual Stone i
 Click [here](https://github.com/skonagaya/CasualStone) for Mac version.
 
 ## Download
-Get the app [here](https://github.com/skonagaya/CasualStonePC/releases/) until I find a better way to distribute.
+Get the app [here](https://github.com/skonagaya/CasualStonePC/releases/download/0.2.1.0/CasualStone_0.2.1.0.zip) until I find a better way to distribute.
 
 ## Features
 Notifications can be sent for the following events:
