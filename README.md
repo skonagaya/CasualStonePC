@@ -39,4 +39,4 @@ Application has been successfully tested on:
 - Windows 10
 
 ## Troubleshooting
-Casual Stone uses the card game application's log files. If the application cannot locate the log file, notifications will fail. Make sure that logging is enabled on your Hearthstone Client. Casual Stone will automatically enable logging when the application is run. Review the these [instructions](https://github.com/jleclanche/fireplace/wiki/How-to-enable-logging) to make sure logging is enabled.
+Casual Stone uses the card game application's log files. If the application cannot locate the log file, notifications will fail. Make sure that logging is enabled on your Hearthstone Client. Casual Stone will automatically enable logging when the application is run. Review the these [instructions](https://github.com/jleclanche/fireplace/wiki/How-to-enable-logging) to make sure logging is enabled. If the install path is manually entered into CasualStone. Make sure to restart both CasualStone and Hearthstone to make sure the configurations have registered.
