@@ -384,7 +384,7 @@ public class HearthLogReader
                                 continue;
                             }
                             // Next line contains the username
-                            if (line.Contains("ACTION_START BlockType=TRIGGER Entity="))
+                            if (line.Contains("BLOCK_START BlockType=TRIGGER Entity="))
                             {
                                 waitingForNextLine = false;
                                 // Snip out everything surrounding the Username
@@ -400,7 +400,7 @@ public class HearthLogReader
                         else if (waitingForNextLine)
                         {
                             waitingForNextLine = false;
-                            if (line.Contains("ACTION_START BlockType=TRIGGER Entity="))
+                            if (line.Contains("BLOCK_START BlockType=TRIGGER Entity="))
                             {
                                 // Snip out everything surrounding the Username
                                 string pattern = "(.*Entity=)|( Effect.*)";
